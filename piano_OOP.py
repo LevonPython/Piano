@@ -51,7 +51,7 @@ class StandardCalculator:
 
         class RadioButton:
 
-            def __init__(self, choicewin, text_info, intro):
+            def __init__(self, choicewin, text_info, buttons_dict, intro):
                 self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
                 Label(choicewin, text=text_info, font=self.helv36).place(x=0)
                 self.var = StringVar()
@@ -59,13 +59,25 @@ class StandardCalculator:
                 self.choicewin = choicewin
                 self.v0 = IntVar()
                 self.v0.set(1)
-                self.r1 = Radiobutton(choicewin, text="Standard", variable=self.v0, value=1, command=self.buttonfn)
-                self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2, command=self.buttonfn)
+                self.r1 = Radiobutton(choicewin, text="Standard", variable=self.v0, value=1, command=lambda: self.buttonfn(buttons_dict))
+                self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2, command=lambda: self.buttonfn(buttons_dict))
                 self.r1.place(x=10, y=30)
                 self.r2.place(x=10, y=60)
 
-            def buttonfn(self):
+            def buttonfn(self, buttons_dict):
+                # print(self.v0.get())
+                self.color_change(self.v0.get(), buttons_dict)
                 return self.v0.get()
+
+            def color_change(self, value, buttons_dict):
+                if value == 1:
+                    print("Standard")
+                    for k in buttons_dict.keys():
+                        k.configure(bg="white")
+                else:
+                    print("colorfull")
+                    for k, v in buttons_dict.items():
+                        k.configure(bg=v)
 
     class Interface(Functionality):
 
@@ -78,15 +90,14 @@ class StandardCalculator:
             # color_style = ttk.Label(self.window, text="Select a piano color-style", font=self.fontStyle3).place(x=0)
             bgcolor = "white"
 
-            text_info = "Select a piano color-style"
-            app_month = self.RadioButton(self.window, text_info, intro="Standard")
+
 
             # white notes
-            buttons = Button(self.root) # , padx=29, pady=110
+            buttons = Button(self.root)  # , padx=29, pady=110
             buttons.grid(row=1, column=0)
 
 
-            button_do_oct1 = Button(self.root, padx=29, pady=110, bg=f"{bgcolor}", command=lambda: self.button_click('C'))
+            button_do_oct1 = Button(self.root, padx=29, pady=110, bg=f"white", command=lambda: self.button_click('C'))
             button_do_oct1.place(x=42, y=175)
 
             button_re_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('D'))
@@ -124,6 +135,11 @@ class StandardCalculator:
             button_la_diez_oct1.place(x=420, y=175)
 
 
+            buttons_dict = {button_do_oct1: "#c92216", button_re_oct1: "#ff991c", button_mi_oct1: "#fff705",
+                            button_fa_oct1: "#7aff05", button_sol_oct1: "#056dff", button_la_oct1: "#5c05ff",
+                            button_si_oct1: "#8205ff"}
+            text_info = "Select a piano color-style"
+            style_color = self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
 
     class Manage(Interface):
         def __init__(self):
