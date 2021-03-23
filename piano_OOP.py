@@ -1,13 +1,10 @@
 from tkinter import *
 import tkinter.font as tk_font
-from tkinter import ttk
-
-
 import pygame
 import os
 
 
-class StandardCalculator:
+class Piano:
 
     class Window:
 
@@ -27,7 +24,6 @@ class StandardCalculator:
 
             # set default digit zero in the window
             self.window.insert(0, "Welcome")
-
 
     class Functionality(Window):
         def __init__(self):
@@ -49,6 +45,10 @@ class StandardCalculator:
             sound.play()
             return
 
+        # KEYBOARD PRESS LOGIC
+        def press(self, digit=None):
+            return self.button_click(digit)
+
         class RadioButton:
 
             def __init__(self, choicewin, text_info, buttons_dict, intro):
@@ -59,8 +59,10 @@ class StandardCalculator:
                 self.choicewin = choicewin
                 self.v0 = IntVar()
                 self.v0.set(1)
-                self.r1 = Radiobutton(choicewin, text="Standard", variable=self.v0, value=1, command=lambda: self.buttonfn(buttons_dict))
-                self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2, command=lambda: self.buttonfn(buttons_dict))
+                self.r1 = Radiobutton(choicewin, text="Standard", variable=self.v0, value=1,
+                                      command=lambda: self.buttonfn(buttons_dict))
+                self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2,
+                                      command=lambda: self.buttonfn(buttons_dict))
                 self.r1.place(x=10, y=30)
                 self.r2.place(x=10, y=60)
 
@@ -69,13 +71,12 @@ class StandardCalculator:
                 self.color_change(self.v0.get(), buttons_dict)
                 return self.v0.get()
 
-            def color_change(self, value, buttons_dict):
+            @staticmethod
+            def color_change(value, buttons_dict):
                 if value == 1:
-                    print("Standard")
                     for k in buttons_dict.keys():
                         k.configure(bg="white")
                 else:
-                    print("colorfull")
                     for k, v in buttons_dict.items():
                         k.configure(bg=v)
 
@@ -86,60 +87,56 @@ class StandardCalculator:
 
             # --------- THE INTERFACE ------------
             # BUTTONS
-            # label
-            # color_style = ttk.Label(self.window, text="Select a piano color-style", font=self.fontStyle3).place(x=0)
-            bgcolor = "white"
-
-
 
             # white notes
             buttons = Button(self.root)  # , padx=29, pady=110
             buttons.grid(row=1, column=0)
 
-
-            button_do_oct1 = Button(self.root, padx=29, pady=110, bg=f"white", command=lambda: self.button_click('C'))
+            button_do_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('C'))
             button_do_oct1.place(x=42, y=175)
-
             button_re_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('D'))
             button_re_oct1.place(x=109, y=175)
-
             button_mi_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('E'))
             button_mi_oct1.place(x=176, y=175)
-
             button_fa_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('F'))
             button_fa_oct1.place(x=243, y=175)
-
             button_sol_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('G'))
             button_sol_oct1.place(x=310, y=175)
-
             button_la_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('A'))
             button_la_oct1.place(x=377, y=175)
-
             button_si_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click('B'))
             button_si_oct1.place(x=444, y=175)
 
             # black notes
-            button_do_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black", command=lambda: self.button_click('C#'))
+            button_do_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+                                         command=lambda: self.button_click('C#'))
             button_do_diez_oct1.place(x=85, y=175)
-
-            button_re_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black", command=lambda: self.button_click('D#'))
+            button_re_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+                                         command=lambda: self.button_click('D#'))
             button_re_diez_oct1.place(x=152, y=175)
-
-            button_fa_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black", command=lambda: self.button_click('F#'))
+            button_fa_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+                                         command=lambda: self.button_click('F#'))
             button_fa_diez_oct1.place(x=286, y=175)
-
-            button_sol_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black", command=lambda: self.button_click('G#'))
+            button_sol_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+                                          command=lambda: self.button_click('G#'))
             button_sol_diez_oct1.place(x=353, y=175)
-
-            button_la_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black", command=lambda: self.button_click('A#'))
+            button_la_diez_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+                                         command=lambda: self.button_click('A#'))
             button_la_diez_oct1.place(x=420, y=175)
-
-
             buttons_dict = {button_do_oct1: "#c92216", button_re_oct1: "#ff991c", button_mi_oct1: "#fff705",
                             button_fa_oct1: "#7aff05", button_sol_oct1: "#056dff", button_la_oct1: "#5c05ff",
                             button_si_oct1: "#8205ff"}
             text_info = "Select a piano color-style"
-            style_color = self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
+
+            self.root.bind('a', lambda event, parameter='C': self.press(parameter))
+            self.root.bind('s', lambda event, parameter='D': self.press(parameter))
+            self.root.bind('d', lambda event, parameter='E': self.press(parameter))
+            self.root.bind('f', lambda event, parameter='F': self.press(parameter))
+            self.root.bind('g', lambda event, parameter='G': self.press(parameter))
+            self.root.bind('h', lambda event, parameter='A': self.press(parameter))
+            self.root.bind('j', lambda event, parameter='B': self.press(parameter))
+
+            self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
 
     class Manage(Interface):
         def __init__(self):
@@ -148,5 +145,5 @@ class StandardCalculator:
 
 
 if __name__ == "__main__":
-    start = StandardCalculator()
+    start = Piano()
     start.Manage()
