@@ -17,8 +17,8 @@ Piano v1.0
 Introduction
 ============
 
-This application is a copied version of windows standard calculator. 
-The application is written in python (used libraries: Tkinter, os, math).
+This application is a minimal functional version of syntesizer/piano. 
+The application is written in python (used libraries: Tkinter, pygame).
 
 * The  `Tkinter <https://docs.python.org/3/library/tkinter.html>`_ package (“Tk interface”) is the standard Python interface to the Tk GUI toolkit. 
 * The `pygame <https://www.pygame.org/docs/>`_  is a set of Python modules designed for writing video games. Pygame adds functionality on top of the excellent SDL library. This allows you to create fully featured games and multimedia programs in the python language. 
@@ -26,22 +26,28 @@ The application is written in python (used libraries: Tkinter, os, math).
 ============
 Problems the application is solving
 ============
-The aim of creating this application is to make application with the same functionalities and interface as in Windows calculator.
+The aim of creating this application is to give users opportunity to use functional piano in their own computer.
 
 ============
 Installation
 ============
 You need to install 
 * Any of python >3.0 versions
-* pip
 * Tk interface library
+    Mark *italic text* with one asterisk, **bold text** with two.
+    For ``monospaced text``, use two "backquotes" instead.
+
+Mark *italic text* with one asterisk, **bold text** with two.
+For ``monospaced text``, use two "backquotes" instead.
+
+-----
 * Pygame library 
 
 
 ============
 How it works
 ============
-Just run the  `piano_OOP.py <#https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`file via any python interpreter.
+Just run the  `piano_OOP.py <https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`file via any python interpreter.
 The script in the file is written in Object Oriented Programming form.
 
 
