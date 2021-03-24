@@ -34,13 +34,6 @@ Installation
 You need to install 
 * Any of python >3.0 versions
 * Tk interface library
-    Mark *italic text* with one asterisk, **bold text** with two.
-    For ``monospaced text``, use two "backquotes" instead.
-
-Mark *italic text* with one asterisk, **bold text** with two.
-For ``monospaced text``, use two "backquotes" instead.
-
------
 * Pygame library 
 
 
