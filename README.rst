@@ -32,9 +32,12 @@ The aim of creating this application is to give users opportunity to use functio
 Installation
 ============
 You need to install 
+
 * Any of python >3.0 versions
 * Tk interface library
+   pip install tkinter
 * Pygame library 
+   pip install pygame
 
 
 ============
