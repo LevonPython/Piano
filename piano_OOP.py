@@ -32,10 +32,6 @@ class Piano:
             super().__init__()
             self.dir = os.path.dirname(__file__)
 
-
-        def change_color(self):
-            pass
-
         def button_click(self, note):
             self.window.delete(0, END)
             self.window.insert(0, note.split('_')[0])
@@ -52,8 +48,8 @@ class Piano:
             return self.button_click(digit)
 
         class RadioButton:
-
             def __init__(self, choicewin, text_info, buttons_dict, intro):
+                super().__init__()
                 self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
                 Label(choicewin, text=text_info, font=self.helv36).place(x=0)
                 self.var = StringVar()
@@ -82,38 +78,6 @@ class Piano:
                     for k, v in buttons_dict.items():
                         k.configure(bg=v)
 
-        class Voices:
-
-            def __init__(self, choicewin):
-                self.choicewin = choicewin
-                self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
-
-                self.option_list = [
-                    "Piano",
-                    "Syntesizer"
-                ]
-
-                self.variable = StringVar(self.choicewin)
-                self.variable.set(self.option_list[0])
-
-                self.opt = OptionMenu(self.choicewin, self.variable, *self.option_list)
-                self.opt.config(width=10, font=self.helv36)
-                self.opt.place(x=200, y=30)
-
-                self.labelTest = Label(text="Select a voice", font=self.helv36, fg='red')
-                self.labelTest.place(x=220, y=12)
-
-                self.variable.trace("w", self.callback)
-
-            def callback(self, *args):
-                print(self.variable.get())
-                if self.variable.get() == "piano":
-                    self.style_name = "piano_"
-                else:
-                    self.style_name = "syntesizer_"
-                self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()))
-
-
 
     class Interface(Functionality):
 
@@ -126,7 +90,6 @@ class Piano:
             # white notes
             buttons = Button(self.root, pady=110)  # , padx=29, pady=110
             buttons.grid(row=1, column=0)
-
 
             button_do_oct1 = Button(self.root, padx=29, pady=110, bg="white", command=lambda: self.button_click(f'{self.style_name}C_3'))
             button_do_oct1.place(x=42, y=175)
@@ -200,13 +163,6 @@ class Piano:
             button_re_diez_oct3 = Button(self.root, padx=14, pady=60, bg="black",
                                          command=lambda: self.button_click('D#_5'))
             button_re_diez_oct3.place(x=1090, y=175)
-            buttons_dict = {button_do_oct1: "#c92216", button_re_oct1: "#ff991c", button_mi_oct1: "#fff705",
-                            button_fa_oct1: "#7aff05", button_sol_oct1: "#056dff", button_la_oct1: "#5c05ff",
-                            button_si_oct1: "#8205ff", button_do_oct2: "#c92216", button_re_oct2: "#ff991c",
-                            button_mi_oct2: "#fff705", button_fa_oct2: "#7aff05", button_sol_oct2: "#056dff",
-                            button_la_oct2: "#5c05ff", button_si_oct2: "#8205ff", button_do_oct3: "#c92216",
-                            button_re_oct3: "#ff991c", button_mi_oct3: "#fff705"}
-            text_info = "Select a piano color-style"
 
             self.root.bind('a', lambda event, parameter='C_3': self.press(parameter))
             self.root.bind('w', lambda event, parameter='C#_3': self.press(parameter))
@@ -233,8 +189,84 @@ class Piano:
             self.root.bind('U', lambda event, parameter='A#_4': self.press(parameter))
             self.root.bind('J', lambda event, parameter='B_4': self.press(parameter))
 
+            buttons_dict = {
+                button_do_oct1: "#c92216", button_re_oct1: "#ff991c", button_mi_oct1: "#fff705",
+                button_fa_oct1: "#7aff05", button_sol_oct1: "#056dff", button_la_oct1: "#5c05ff",
+                button_si_oct1: "#8205ff", button_do_oct2: "#c92216", button_re_oct2: "#ff991c",
+                button_mi_oct2: "#fff705", button_fa_oct2: "#7aff05", button_sol_oct2: "#056dff",
+                button_la_oct2: "#5c05ff", button_si_oct2: "#8205ff", button_do_oct3: "#c92216",
+                button_re_oct3: "#ff991c", button_mi_oct3: "#fff705"
+            }
+            notes_voices = {
+                button_do_oct1: 'C_3', button_re_oct1: 'D_3',
+                button_mi_oct1: 'E_3', button_fa_oct1: 'F_3',
+                button_sol_oct1: 'G_3', button_la_oct1: 'A_3',
+                button_si_oct1: 'B_3', button_do_oct2: 'C_4',
+                button_re_oct2: 'D_4', button_mi_oct2: 'E_4',
+                button_fa_oct2: 'F_4', button_sol_oct2: 'G_4',
+                button_la_oct2: 'A_4', button_si_oct2: 'B_4',
+                button_do_oct3: 'C_5', button_re_oct3: 'D_5',
+                button_mi_oct3: 'E_5'
+            }
+            text_info = "Select a piano color-style"
+
             self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
-            self.Voices(self.window)
+            self.Voices(self.window, notes_voices, self.window, self.dir)
+
+        class Voices:
+            def __init__(self, choicewin, notes_voices_dict, window, dir):
+                super().__init__()
+                self.choicewin = choicewin
+                self.voices = notes_voices_dict
+                self.window = window
+                self.dir = dir
+                self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
+                self.option_list = [
+                    "Piano",
+                    "Syntesizer"
+                ]
+                self.variable = StringVar(self.choicewin)
+                self.variable.set(self.option_list[0])
+                self.opt = OptionMenu(self.choicewin, self.variable, *self.option_list)
+                self.opt.config(width=10, font=self.helv36)
+                self.opt.place(x=200, y=30)
+                self.labelTest = Label(text="Select a voice", font=self.helv36, fg='red')
+                self.labelTest.place(x=220, y=12)
+                self.variable.trace("w", self.callback)
+
+            def callback(self, *args):
+                print(self.variable.get())
+                if self.variable.get() == "Piano":
+                    self.style_name = "piano_"
+                else:
+                    self.style_name = "syntesizer_"
+                self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()))
+                print(self.voices)
+                self.change_voice(self.style_name, self.voices)
+
+            def change_voice(self, name, voices):
+                super().__init__()
+                if name == "piano_":
+                    for k, v in voices.items():
+                        k.configure(command=lambda: self.button_click(f'{name}{v}'))
+                        print(f"Concatened: f'{name}{v}'")
+                elif name == "syntesizer_":
+                    for k, v in voices.items():
+                        k.configure(command=lambda: self.button_click(f'{name}{v}'))
+                        print(f"Concatened: f'{name}{v}'")
+                self.window.delete(0, END)
+                self.window.insert(0, name.split('_')[0])
+            def button_click(self, note):
+                self.window.delete(0, END)
+                self.window.insert(0, note.split('_')[1])
+                pygame.init()
+                print(f"note is {note}")
+                rel_path = f"sounds/{note}.mp3"
+                full_path = os.path.join(self.dir, rel_path)
+                print(full_path)
+                sound = pygame.mixer.Sound(f"{full_path}")
+                sound.play()
+                return
 
     class Manage(Interface):
         def __init__(self):
