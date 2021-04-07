@@ -18,6 +18,7 @@ class Piano:
             self.fontStyle3 = tk_font.Font(size=8, family="Courier")
 
             self.style_name = "piano_"
+            self.volume = 0.05
 
             # WINDOWS
 
@@ -28,20 +29,30 @@ class Piano:
             self.window.insert(0, "Welcome")
 
     class Functionality(Window):
+
         def __init__(self):
             super().__init__()
             self.dir = os.path.dirname(__file__)
 
+            self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow",
+                                  command=self.volume_controller)
+            self.vertical.place(x=1, y=1)
+
+        def volume_controller(self, *args):
+            print(self.vertical.get(), self.vertical.get()/100)
+            self.volume = self.vertical.get()/100
+
         def button_click(self, note):
             self.window.delete(0, END)
-            self.window.insert(0, note.split('_')[0])
+            self.window.insert(0, note.split('_')[1])
             pygame.init()
             rel_path = f"sounds/{note}.mp3"
             full_path = os.path.join(self.dir, rel_path)
             print(full_path)
             sound = pygame.mixer.Sound(f"{full_path}")
+            sound.set_volume(self.volume)
+            print(f"self.volume is {self.volume}-----------")
             sound.play()
-            return
 
         # KEYBOARD PRESS LOGIC
         def press(self, digit=None):
@@ -51,7 +62,7 @@ class Piano:
             def __init__(self, choicewin, text_info, buttons_dict, intro):
                 super().__init__()
                 self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
-                Label(choicewin, text=text_info, font=self.helv36).place(x=0)
+                Label(choicewin, text=text_info, font=self.helv36).place(x=70)
                 self.var = StringVar()
                 self.var.set(intro)
                 self.choicewin = choicewin
@@ -61,8 +72,8 @@ class Piano:
                                       command=lambda: self.buttonfn(buttons_dict))
                 self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2,
                                       command=lambda: self.buttonfn(buttons_dict))
-                self.r1.place(x=10, y=30)
-                self.r2.place(x=10, y=60)
+                self.r1.place(x=70, y=30)
+                self.r2.place(x=70, y=60)
 
             def buttonfn(self, buttons_dict):
                 # print(self.v0.get())
@@ -79,7 +90,8 @@ class Piano:
                         k.configure(bg=v)
 
         class Voices:
-            def __init__(self, choicewin, notes_voices_dict, window, direction):
+
+            def __init__(self, choicewin, notes_voices_dict, window, direction, volume):
                 super().__init__()
                 self.choicewin = choicewin
                 self.voices = notes_voices_dict
@@ -94,10 +106,20 @@ class Piano:
                 self.variable.set(self.option_list[0])
                 self.opt = OptionMenu(self.choicewin, self.variable, *self.option_list)
                 self.opt.config(width=10, font=self.helv36)
-                self.opt.place(x=200, y=30)
+                self.opt.place(x=250, y=30)
                 self.labelTest = Label(text="Select a voice", font=self.helv36, fg='red')
-                self.labelTest.place(x=220, y=12)
+                self.labelTest.place(x=270, y=13)
                 self.variable.trace("w", self.callback)
+                self.volume = volume
+                print(f"self.volume in voices: {self.volume}")
+
+                self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow",
+                                      command=self.volume_controller)
+                self.vertical.place(x=1, y=1)
+
+            def volume_controller(self, *args):
+                print(f"Volume: {self.vertical.get()} {self.vertical.get() / 100}")
+                self.volume = self.vertical.get() / 100
 
             def callback(self, *args):
                 print(self.variable.get())
@@ -128,6 +150,7 @@ class Piano:
                 full_path = os.path.join(self.dir, rel_path)
                 print(full_path)
                 sound = pygame.mixer.Sound(f"{full_path}")
+                sound.set_volume(self.volume)
                 sound.play()
                 return
 
@@ -280,7 +303,7 @@ class Piano:
             text_info = "Select a piano color-style"
 
             self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
-            self.Voices(self.window, notes_voices, self.window, self.dir)
+            self.Voices(self.window, notes_voices, self.window, self.dir, self.volume)
 
     class Manage(Interface):
         def __init__(self):
