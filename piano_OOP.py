@@ -16,6 +16,7 @@ class Piano:
             self.fontStyle = tk_font.Font(size=32, family="Courier", weight="bold")
             self.fontStyle2 = tk_font.Font(size=18, family="Courier")
             self.fontStyle3 = tk_font.Font(size=8, family="Courier")
+            self.feature_font = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
 
             self.style_name = "piano_"
             self.volume = 0.05
@@ -33,10 +34,11 @@ class Piano:
         def __init__(self):
             super().__init__()
             self.dir = os.path.dirname(__file__)
-
-            self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow",
+            self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
+            Label(self.window, text="Volume \ncontroller", font=self.helv36).place(x=5)
+            self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow", bd=3, width=20,
                                   command=self.volume_controller)
-            self.vertical.place(x=1, y=1)
+            self.vertical.place(x=1, y=35)
 
         def volume_controller(self, *args):
             print(self.vertical.get(), self.vertical.get()/100)
@@ -44,25 +46,26 @@ class Piano:
 
         def button_click(self, note):
             self.window.delete(0, END)
-            self.window.insert(0, note.split('_')[1])
-            pygame.init()
-            rel_path = f"sounds/{note}.mp3"
-            full_path = os.path.join(self.dir, rel_path)
-            print(full_path)
-            sound = pygame.mixer.Sound(f"{full_path}")
-            sound.set_volume(self.volume)
-            print(f"self.volume is {self.volume}-----------")
-            sound.play()
+            self.window.insert(0, "Please first select a voice")
+            # self.window.insert(0, note.split('_')[1])
+            # pygame.init()
+            # rel_path = f"sounds/{note}.mp3"
+            # full_path = os.path.join(self.dir, rel_path)
+            # print(full_path)
+            # sound = pygame.mixer.Sound(f"{full_path}")
+            # sound.set_volume(self.volume)
+            # print(f"self.volume is {self.volume}-----------")
+            # sound.play()
 
         # KEYBOARD PRESS LOGIC
         def press(self, digit=None):
             return self.button_click(digit)
 
         class RadioButton:
-            def __init__(self, choicewin, text_info, buttons_dict, intro):
+            def __init__(self, choicewin, text_info, buttons_dict, feature_font, intro):
                 super().__init__()
-                self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
-                Label(choicewin, text=text_info, font=self.helv36).place(x=70)
+                self.helv36 = feature_font
+                Label(choicewin, text=text_info, font=self.helv36).place(x=110)
                 self.var = StringVar()
                 self.var.set(intro)
                 self.choicewin = choicewin
@@ -72,8 +75,8 @@ class Piano:
                                       command=lambda: self.buttonfn(buttons_dict))
                 self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2,
                                       command=lambda: self.buttonfn(buttons_dict))
-                self.r1.place(x=70, y=30)
-                self.r2.place(x=70, y=60)
+                self.r1.place(x=110, y=40)
+                self.r2.place(x=110, y=70)
 
             def buttonfn(self, buttons_dict):
                 # print(self.v0.get())
@@ -91,35 +94,33 @@ class Piano:
 
         class Voices:
 
-            def __init__(self, choicewin, notes_voices_dict, window, direction, volume):
-                super().__init__()
+            def __init__(self, choicewin, notes_voices_dict, window, direction, volume, vertical_vol, feature_font):
+                # super().__init__()
                 self.choicewin = choicewin
                 self.voices = notes_voices_dict
                 self.window = window
                 self.dir = direction
-                self.helv36 = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
+                self.helv36 = feature_font
                 self.option_list = [
                     "Piano",
                     "Syntesizer"
                 ]
                 self.variable = StringVar(self.choicewin)
-                self.variable.set(self.option_list[0])
+                self.variable.set("Not selected")
                 self.opt = OptionMenu(self.choicewin, self.variable, *self.option_list)
                 self.opt.config(width=10, font=self.helv36)
-                self.opt.place(x=250, y=30)
-                self.labelTest = Label(text="Select a voice", font=self.helv36, fg='red')
+                self.opt.place(x=250, y=35)
+                self.labelTest = Label(text="Select a voice\n*required", font=self.helv36, fg='red')
                 self.labelTest.place(x=270, y=13)
                 self.variable.trace("w", self.callback)
                 self.volume = volume
                 print(f"self.volume in voices: {self.volume}")
-
-                self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow",
-                                      command=self.volume_controller)
-                self.vertical.place(x=1, y=1)
+                self.vertical_vol = vertical_vol
+                self.vertical_vol.configure(command=self.volume_controller)
 
             def volume_controller(self, *args):
-                print(f"Volume: {self.vertical.get()} {self.vertical.get() / 100}")
-                self.volume = self.vertical.get() / 100
+                print(f"Volume: {self.vertical_vol.get()} {self.vertical_vol.get() / 100}")
+                self.volume = self.vertical_vol.get() / 100
 
             def callback(self, *args):
                 print(self.variable.get())
@@ -127,7 +128,7 @@ class Piano:
                     style_name = "piano_"
                 else:
                     style_name = "syntesizer_"
-                self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()))
+                self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()), fg='black')
                 print(self.voices)
                 self.change_voice(style_name, self.voices)
 
@@ -152,6 +153,7 @@ class Piano:
                 sound = pygame.mixer.Sound(f"{full_path}")
                 sound.set_volume(self.volume)
                 sound.play()
+                print(f"Voice.volume is: {self.volume}")
                 return
 
     class Interface(Functionality):
@@ -300,10 +302,10 @@ class Piano:
                 button_sol_diez_oct2: 'G#_4', button_la_diez_oct2: 'A#_4', button_do_diez_oct3: 'C#_5',
                 button_re_diez_oct3: 'D#_5'
             }
-            text_info = "Select a piano color-style"
+            text_info = "Select a piano \ncolor-style"
 
-            self.RadioButton(self.window, text_info, buttons_dict, intro="Standard")
-            self.Voices(self.window, notes_voices, self.window, self.dir, self.volume)
+            self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
+            self.Voices(self.window, notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font)
 
     class Manage(Interface):
         def __init__(self):
