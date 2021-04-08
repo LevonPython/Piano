@@ -18,7 +18,7 @@ class Piano:
             self.fontStyle3 = tk_font.Font(size=8, family="Courier")
             self.feature_font = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
 
-            self.style_name = "piano_"
+            self.style_name = "Piano_"
             self.volume = 0.05
 
             # WINDOWS
@@ -46,7 +46,7 @@ class Piano:
 
         def button_click(self, note):
             self.window.delete(0, END)
-            self.window.insert(0, "Please first select a voice")
+            self.window.insert(0, "Please select a voice")
             # self.window.insert(0, note.split('_')[1])
             # pygame.init()
             # rel_path = f"sounds/{note}.mp3"
@@ -62,24 +62,28 @@ class Piano:
             return self.button_click(digit)
 
         class RadioButton:
-            def __init__(self, choicewin, text_info, buttons_dict, feature_font, intro):
+            def __init__(self, window, text_info, buttons_dict, feature_font, intro):
                 super().__init__()
                 self.helv36 = feature_font
-                Label(choicewin, text=text_info, font=self.helv36).place(x=110)
+                Label(window, text=text_info, font=self.helv36).place(x=110)
                 self.var = StringVar()
                 self.var.set(intro)
-                self.choicewin = choicewin
+                self.window = window
                 self.v0 = IntVar()
                 self.v0.set(1)
-                self.r1 = Radiobutton(choicewin, text="Standard", variable=self.v0, value=1,
+                self.r1 = Radiobutton(self.window, text="Standard", variable=self.v0, value=1,
                                       command=lambda: self.buttonfn(buttons_dict))
-                self.r2 = Radiobutton(choicewin, text="Colorfull", variable=self.v0, value=2,
+                self.r2 = Radiobutton(self.window, text="Colorfull", variable=self.v0, value=2,
                                       command=lambda: self.buttonfn(buttons_dict))
                 self.r1.place(x=110, y=40)
                 self.r2.place(x=110, y=70)
 
             def buttonfn(self, buttons_dict):
-                # print(self.v0.get())
+                self.window.delete(0, END)
+                if self.v0.get() == 1:
+                    self.window.insert(0, "Color: Standard")
+                else:
+                    self.window.insert(0, "Color: Colorfull")
                 self.color_change(self.v0.get(), buttons_dict)
                 return self.v0.get()
 
@@ -94,9 +98,35 @@ class Piano:
 
         class Voices:
 
-            def __init__(self, choicewin, notes_voices_dict, window, direction, volume, vertical_vol, feature_font):
-                # super().__init__()
-                self.choicewin = choicewin
+            def __init__(self, notes_voices_dict, window, direction, volume, vertical_vol, feature_font, stylename, root):
+                super().__init__()
+                self.style_name = stylename
+                self.root = root
+                self.root.bind('a', lambda event, parameter=f'{self.style_name}C_3': self.press(parameter))
+                self.root.bind('w', lambda event, parameter=f'{self.style_name}C#_3': self.press(parameter))
+                self.root.bind('s', lambda event, parameter=f'{self.style_name}D_3': self.press(parameter))
+                self.root.bind('e', lambda event, parameter=f'{self.style_name}D#_3': self.press(parameter))
+                self.root.bind('d', lambda event, parameter=f'{self.style_name}E_3': self.press(parameter))
+                self.root.bind('f', lambda event, parameter=f'{self.style_name}F_3': self.press(parameter))
+                self.root.bind('t', lambda event, parameter=f'{self.style_name}F#_3': self.press(parameter))
+                self.root.bind('g', lambda event, parameter=f'{self.style_name}G_3': self.press(parameter))
+                self.root.bind('y', lambda event, parameter=f'{self.style_name}G#_3': self.press(parameter))
+                self.root.bind('h', lambda event, parameter=f'{self.style_name}A_3': self.press(parameter))
+                self.root.bind('u', lambda event, parameter=f'{self.style_name}A#_3': self.press(parameter))
+                self.root.bind('j', lambda event, parameter=f'{self.style_name}B_3': self.press(parameter))
+                self.root.bind('A', lambda event, parameter=f'{self.style_name}C_4': self.press(parameter))
+                self.root.bind('B', lambda event, parameter=f'{self.style_name}C#_4': self.press(parameter))
+                self.root.bind('S', lambda event, parameter=f'{self.style_name}D_4': self.press(parameter))
+                self.root.bind('R', lambda event, parameter=f'{self.style_name}D#_4': self.press(parameter))
+                self.root.bind('D', lambda event, parameter=f'{self.style_name}E_4': self.press(parameter))
+                self.root.bind('F', lambda event, parameter=f'{self.style_name}F_4': self.press(parameter))
+                self.root.bind('T', lambda event, parameter=f'{self.style_name}F#_4': self.press(parameter))
+                self.root.bind('G', lambda event, parameter=f'{self.style_name}G_4': self.press(parameter))
+                self.root.bind('Y', lambda event, parameter=f'{self.style_name}G#_4': self.press(parameter))
+                self.root.bind('H', lambda event, parameter=f'{self.style_name}A_4': self.press(parameter))
+                self.root.bind('U', lambda event, parameter=f'{self.style_name}A#_4': self.press(parameter))
+                self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
+                # voice selecting elements
                 self.voices = notes_voices_dict
                 self.window = window
                 self.dir = direction
@@ -105,14 +135,15 @@ class Piano:
                     "Piano",
                     "Syntesizer"
                 ]
-                self.variable = StringVar(self.choicewin)
+                self.variable = StringVar(self.window)
                 self.variable.set("Not selected")
-                self.opt = OptionMenu(self.choicewin, self.variable, *self.option_list)
+                self.opt = OptionMenu(self.window, self.variable, *self.option_list)
                 self.opt.config(width=10, font=self.helv36)
                 self.opt.place(x=250, y=35)
                 self.labelTest = Label(text="Select a voice\n*required", font=self.helv36, fg='red')
                 self.labelTest.place(x=270, y=13)
                 self.variable.trace("w", self.callback)
+                # volume controller elements
                 self.volume = volume
                 print(f"self.volume in voices: {self.volume}")
                 self.vertical_vol = vertical_vol
@@ -121,13 +152,15 @@ class Piano:
             def volume_controller(self, *args):
                 print(f"Volume: {self.vertical_vol.get()} {self.vertical_vol.get() / 100}")
                 self.volume = self.vertical_vol.get() / 100
+                self.window.delete(0, END)
+                self.window.insert(0, f"Volume: {self.vertical_vol.get()}")
 
             def callback(self, *args):
                 print(self.variable.get())
                 if self.variable.get() == "Piano":
-                    style_name = "piano_"
+                    style_name = "Piano_"
                 else:
-                    style_name = "syntesizer_"
+                    style_name = "Syntesizer_"
                 self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()), fg='black')
                 print(self.voices)
                 self.change_voice(style_name, self.voices)
@@ -137,7 +170,7 @@ class Piano:
                 for k, v in voices.items():
                     self.configure_voices(name, k, v)
                 self.window.delete(0, END)
-                self.window.insert(0, name.split('_')[0])
+                self.window.insert(0, f"Voice: {name.split('_')[0]}")
 
             def configure_voices(self, name, key, value):
                 key.configure(command=lambda: self.button_click(f'{name}{value}'))
@@ -155,6 +188,10 @@ class Piano:
                 sound.play()
                 print(f"Voice.volume is: {self.volume}")
                 return
+
+            # KEYBOARD PRESS LOGIC
+            def press(self, digit=None):
+                return self.button_click(digit)
 
     class Interface(Functionality):
 
@@ -258,30 +295,6 @@ class Piano:
                                          command=lambda: self.button_click(f'{self.style_name}D#_5'))
             button_re_diez_oct3.place(x=1090, y=175)
 
-            self.root.bind('a', lambda event, parameter=f'{self.style_name}C_3': self.press(parameter))
-            self.root.bind('w', lambda event, parameter=f'{self.style_name}C#_3': self.press(parameter))
-            self.root.bind('s', lambda event, parameter=f'{self.style_name}D_3': self.press(parameter))
-            self.root.bind('e', lambda event, parameter=f'{self.style_name}D#_3': self.press(parameter))
-            self.root.bind('d', lambda event, parameter=f'{self.style_name}E_3': self.press(parameter))
-            self.root.bind('f', lambda event, parameter=f'{self.style_name}F_3': self.press(parameter))
-            self.root.bind('t', lambda event, parameter=f'{self.style_name}F#_3': self.press(parameter))
-            self.root.bind('g', lambda event, parameter=f'{self.style_name}G_3': self.press(parameter))
-            self.root.bind('y', lambda event, parameter=f'{self.style_name}G#_3': self.press(parameter))
-            self.root.bind('h', lambda event, parameter=f'{self.style_name}A_3': self.press(parameter))
-            self.root.bind('u', lambda event, parameter=f'{self.style_name}A#_3': self.press(parameter))
-            self.root.bind('j', lambda event, parameter=f'{self.style_name}B_3': self.press(parameter))
-            self.root.bind('A', lambda event, parameter=f'{self.style_name}C_4': self.press(parameter))
-            self.root.bind('B', lambda event, parameter=f'{self.style_name}C#_4': self.press(parameter))
-            self.root.bind('S', lambda event, parameter=f'{self.style_name}D_4': self.press(parameter))
-            self.root.bind('R', lambda event, parameter=f'{self.style_name}D#_4': self.press(parameter))
-            self.root.bind('D', lambda event, parameter=f'{self.style_name}E_4': self.press(parameter))
-            self.root.bind('F', lambda event, parameter=f'{self.style_name}F_4': self.press(parameter))
-            self.root.bind('T', lambda event, parameter=f'{self.style_name}F#_4': self.press(parameter))
-            self.root.bind('G', lambda event, parameter=f'{self.style_name}G_4': self.press(parameter))
-            self.root.bind('Y', lambda event, parameter=f'{self.style_name}G#_4': self.press(parameter))
-            self.root.bind('H', lambda event, parameter=f'{self.style_name}A_4': self.press(parameter))
-            self.root.bind('U', lambda event, parameter=f'{self.style_name}A#_4': self.press(parameter))
-            self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
 
             buttons_dict = {
                 button_do_oct1: "#c92216", button_re_oct1: "#ff991c", button_mi_oct1: "#fff705",
@@ -305,7 +318,33 @@ class Piano:
             text_info = "Select a piano \ncolor-style"
 
             self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
-            self.Voices(self.window, notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font)
+            voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font, self.style_name, self.root)
+
+
+            self.root.bind('a', lambda event, parameter=f'{self.style_name}C_3': voice_obj.press(parameter))
+            self.root.bind('w', lambda event, parameter=f'{self.style_name}C#_3': self.press(parameter))
+            self.root.bind('s', lambda event, parameter=f'{self.style_name}D_3': self.press(parameter))
+            self.root.bind('e', lambda event, parameter=f'{self.style_name}D#_3': self.press(parameter))
+            self.root.bind('d', lambda event, parameter=f'{self.style_name}E_3': self.press(parameter))
+            self.root.bind('f', lambda event, parameter=f'{self.style_name}F_3': self.press(parameter))
+            self.root.bind('t', lambda event, parameter=f'{self.style_name}F#_3': self.press(parameter))
+            self.root.bind('g', lambda event, parameter=f'{self.style_name}G_3': self.press(parameter))
+            self.root.bind('y', lambda event, parameter=f'{self.style_name}G#_3': self.press(parameter))
+            self.root.bind('h', lambda event, parameter=f'{self.style_name}A_3': self.press(parameter))
+            self.root.bind('u', lambda event, parameter=f'{self.style_name}A#_3': self.press(parameter))
+            self.root.bind('j', lambda event, parameter=f'{self.style_name}B_3': self.press(parameter))
+            self.root.bind('A', lambda event, parameter=f'{self.style_name}C_4': self.press(parameter))
+            self.root.bind('B', lambda event, parameter=f'{self.style_name}C#_4': self.press(parameter))
+            self.root.bind('S', lambda event, parameter=f'{self.style_name}D_4': self.press(parameter))
+            self.root.bind('R', lambda event, parameter=f'{self.style_name}D#_4': self.press(parameter))
+            self.root.bind('D', lambda event, parameter=f'{self.style_name}E_4': self.press(parameter))
+            self.root.bind('F', lambda event, parameter=f'{self.style_name}F_4': self.press(parameter))
+            self.root.bind('T', lambda event, parameter=f'{self.style_name}F#_4': self.press(parameter))
+            self.root.bind('G', lambda event, parameter=f'{self.style_name}G_4': self.press(parameter))
+            self.root.bind('Y', lambda event, parameter=f'{self.style_name}G#_4': self.press(parameter))
+            self.root.bind('H', lambda event, parameter=f'{self.style_name}A_4': self.press(parameter))
+            self.root.bind('U', lambda event, parameter=f'{self.style_name}A#_4': self.press(parameter))
+            self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
 
     class Manage(Interface):
         def __init__(self):
