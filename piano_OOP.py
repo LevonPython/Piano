@@ -99,7 +99,7 @@ class Piano:
         class Voices:
 
             def __init__(self, notes_voices_dict, window, direction, volume, vertical_vol, feature_font, stylename, root):
-                super().__init__()
+                # super().__init__()
                 self.style_name = stylename
                 self.root = root
                 self.root.bind('a', lambda event, parameter=f'{self.style_name}C_3': self.press(parameter))
@@ -179,7 +179,6 @@ class Piano:
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
                 pygame.init()
-                print(f"note is {note}")
                 rel_path = f"sounds/{note}.mp3"
                 full_path = os.path.join(self.dir, rel_path)
                 print(full_path)
@@ -191,6 +190,10 @@ class Piano:
 
             # KEYBOARD PRESS LOGIC
             def press(self, digit=None):
+                if self.variable.get() == "Not selected":
+                    self.window.delete(0, END)
+                    self.window.insert(0, "Please select a voice")
+                    return
                 return self.button_click(digit)
 
     class Interface(Functionality):
@@ -318,33 +321,8 @@ class Piano:
             text_info = "Select a piano \ncolor-style"
 
             self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
-            voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font, self.style_name, self.root)
+            self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font, self.style_name, self.root)
 
-
-            self.root.bind('a', lambda event, parameter=f'{self.style_name}C_3': voice_obj.press(parameter))
-            self.root.bind('w', lambda event, parameter=f'{self.style_name}C#_3': self.press(parameter))
-            self.root.bind('s', lambda event, parameter=f'{self.style_name}D_3': self.press(parameter))
-            self.root.bind('e', lambda event, parameter=f'{self.style_name}D#_3': self.press(parameter))
-            self.root.bind('d', lambda event, parameter=f'{self.style_name}E_3': self.press(parameter))
-            self.root.bind('f', lambda event, parameter=f'{self.style_name}F_3': self.press(parameter))
-            self.root.bind('t', lambda event, parameter=f'{self.style_name}F#_3': self.press(parameter))
-            self.root.bind('g', lambda event, parameter=f'{self.style_name}G_3': self.press(parameter))
-            self.root.bind('y', lambda event, parameter=f'{self.style_name}G#_3': self.press(parameter))
-            self.root.bind('h', lambda event, parameter=f'{self.style_name}A_3': self.press(parameter))
-            self.root.bind('u', lambda event, parameter=f'{self.style_name}A#_3': self.press(parameter))
-            self.root.bind('j', lambda event, parameter=f'{self.style_name}B_3': self.press(parameter))
-            self.root.bind('A', lambda event, parameter=f'{self.style_name}C_4': self.press(parameter))
-            self.root.bind('B', lambda event, parameter=f'{self.style_name}C#_4': self.press(parameter))
-            self.root.bind('S', lambda event, parameter=f'{self.style_name}D_4': self.press(parameter))
-            self.root.bind('R', lambda event, parameter=f'{self.style_name}D#_4': self.press(parameter))
-            self.root.bind('D', lambda event, parameter=f'{self.style_name}E_4': self.press(parameter))
-            self.root.bind('F', lambda event, parameter=f'{self.style_name}F_4': self.press(parameter))
-            self.root.bind('T', lambda event, parameter=f'{self.style_name}F#_4': self.press(parameter))
-            self.root.bind('G', lambda event, parameter=f'{self.style_name}G_4': self.press(parameter))
-            self.root.bind('Y', lambda event, parameter=f'{self.style_name}G#_4': self.press(parameter))
-            self.root.bind('H', lambda event, parameter=f'{self.style_name}A_4': self.press(parameter))
-            self.root.bind('U', lambda event, parameter=f'{self.style_name}A#_4': self.press(parameter))
-            self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
 
     class Manage(Interface):
         def __init__(self):
