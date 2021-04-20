@@ -3,6 +3,11 @@ import tkinter.font as tk_font
 import pygame
 import os
 
+# impolement recording
+# implement volume from mouse
+# implement turn off/on
+# implement new voice stytles
+# implement click when pressing
 
 class Piano:
 
@@ -47,6 +52,8 @@ class Piano:
         def button_click(self, note):
             self.window.delete(0, END)
             self.window.insert(0, "Please select a voice")
+
+
 
         class RadioButton:
             def __init__(self, window, text_info, buttons_dict, feature_font, intro):
@@ -114,6 +121,9 @@ class Piano:
                 self.root.bind('H', lambda event, parameter=f'{self.style_name}A_4': self.press(parameter))
                 self.root.bind('U', lambda event, parameter=f'{self.style_name}A#_4': self.press(parameter))
                 self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
+                self.root.bind('<Up>', lambda event, parameter=f'vol_up': self.press(parameter))
+                self.root.bind('<Down>', lambda event, parameter=f'vol_down': self.press(parameter))
+
                 # voice selecting elements
                 self.voices = notes_voices_dict
                 self.window = window
@@ -143,6 +153,13 @@ class Piano:
                 self.window.delete(0, END)
                 self.window.insert(0, f"Volume: {self.vertical_vol.get()}")
 
+            def volume_controller2(self, *args):
+                print("------")
+                print(f"Volume: {args}")
+                self.volume = args[0]
+                self.window.delete(0, END)
+                self.window.insert(0, f"Volume: {self.volume}")
+
             def callback(self, *args):
                 print(self.variable.get())
                 if self.variable.get() == "Piano":
@@ -166,6 +183,15 @@ class Piano:
             def button_click(self, note):
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
+                if note  == 'vol_up':
+                    self.volume += 0.1
+                    print(f"self.volume: {self.volume}")
+                    return self.volume_controller2(self.volume)
+                elif note == 'vol_down':
+                    self.volume -= 0.1
+                    print(f"self.volume: {self.volume}")
+                    return self.volume_controller2(self.volume)
+
                 pygame.init()
                 rel_path = f"sounds/{note}.mp3"
                 full_path = os.path.join(self.dir, rel_path)
@@ -182,7 +208,37 @@ class Piano:
                     self.window.delete(0, END)
                     self.window.insert(0, "Please select a voice")
                     return
+                note_name = '_'.join(digit.split('_')[1:])
+                print(f"note_name is {note_name}")
+                for k, v in self.voices.items():
+                    if v == note_name:
+                        self.change_on_hover(k, "#e6e9eb", k.cget('bg'))
                 return self.button_click(digit)
+
+            def change_on_hover(self, button, on_hover, on_leave):
+                # background on entering widget
+                button.config(background=on_hover)
+                self.root.after(100, lambda: button.config(background=on_leave))
+
+        class Switch:
+
+            def __init__(self, root):
+                self.root = root
+                self.on_off = Button(self.root, text="ON / OFF", command=self.switch_button_state())
+                self.on_off.place(x=10, y=10)
+
+
+            def switch_button_state(self):
+                # if (self.on_off['state'] == NORMAL):
+                #     # button1['state'] = tk.DISABLED
+                #     print("IS NORMAL")
+                #     pass
+                # else:
+                #     # button1['state'] = tk.NORMAL
+                #     pass
+                pass
+
+
 
     class Interface(Functionality):
 
@@ -191,6 +247,7 @@ class Piano:
 
             # --------- THE INTERFACE ------------
             # BUTTONS
+
 
             # white notes
             buttons = Button(self.root, pady=110)
@@ -310,6 +367,8 @@ class Piano:
             self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
             self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
                         self.style_name, self.root)
+            self.Switch(self.root)
+
 
     class Manage(Interface):
         def __init__(self):
