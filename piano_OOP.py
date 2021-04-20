@@ -9,6 +9,7 @@ import os
 # implement new voice stytles
 # implement click when pressing
 
+
 class Piano:
 
     class Window:
@@ -123,10 +124,7 @@ class Piano:
                 self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
                 self.root.bind('<Up>', lambda event, parameter=f'vol_up': self.press(parameter))
                 self.root.bind('<Down>', lambda event, parameter=f'vol_down': self.press(parameter))
-<<<<<<< HEAD
 
-=======
->>>>>>> 50331a467061681fac2ec113ad043eeb975b5d2d
                 # voice selecting elements
                 self.voices = notes_voices_dict
                 self.window = window
@@ -157,10 +155,6 @@ class Piano:
                 self.window.delete(0, END)
                 self.window.insert(0, f"Volume: {self.vertical_vol.get()}")
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 50331a467061681fac2ec113ad043eeb975b5d2d
             def volume_controller2(self, *args):
                 print("------")
                 print(f"Volume: {args}")
@@ -193,7 +187,7 @@ class Piano:
                 print("UP?")
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
-                if note  == 'vol_up':
+                if note == 'vol_up':
                     self.volume += 0.1
                     print(f"self.volume: {self.volume}")
                     return self.volume_controller2(self.volume)
@@ -201,10 +195,7 @@ class Piano:
                     self.volume -= 0.1
                     print(f"self.volume: {self.volume}")
                     return self.volume_controller2(self.volume)
-<<<<<<< HEAD
 
-=======
->>>>>>> 50331a467061681fac2ec113ad043eeb975b5d2d
                 pygame.init()
                 rel_path = f"sounds/{note}.mp3"
                 full_path = os.path.join(self.dir, rel_path)
@@ -240,7 +231,6 @@ class Piano:
                 self.on_off = Button(self.root, text="ON / OFF", command=self.switch_button_state())
                 self.on_off.place(x=10, y=10)
 
-
             def switch_button_state(self):
                 # if (self.on_off['state'] == NORMAL):
                 #     # button1['state'] = tk.DISABLED
@@ -251,8 +241,6 @@ class Piano:
                 #     pass
                 pass
 
-
-
     class Interface(Functionality):
 
         def __init__(self):
@@ -260,8 +248,6 @@ class Piano:
 
             # --------- THE INTERFACE ------------
             # BUTTONS
-
-
             # white notes
             buttons = Button(self.root, pady=110)
             buttons.grid(row=1, column=0)
@@ -381,7 +367,6 @@ class Piano:
             self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
                         self.style_name, self.root)
             self.Switch(self.root)
-
 
     class Manage(Interface):
         def __init__(self):
