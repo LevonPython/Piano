@@ -3,15 +3,15 @@ import tkinter.font as tk_font
 import pygame
 import os
 
-# impolement recording
-# implement volume from mouse
-# implement turn off/on
-# implement new voice stytles
-# implement click when pressing
+
+# impelement recording 0%
+# implement volume from mouse 0%
+# implement turn off/on 80%
+# implement new voice stytles 15%
+# implement click when pressing 100%
 
 
 class Piano:
-
     class Window:
 
         def __init__(self):
@@ -33,7 +33,7 @@ class Piano:
             self.window.grid(row=0, column=0, columnspan=4, padx=20, pady=12, ipadx=450, ipady=50)
 
             # set default digit zero in the window
-            self.window.insert(0, "Welcome")
+            self.window.insert(0, "Welcome, please turn ON")
 
     class Functionality(Window):
 
@@ -41,37 +41,37 @@ class Piano:
             super().__init__()
             self.dir = os.path.dirname(__file__)
             self.font_func = tk_font.Font(family='Helvetica', size=10, weight=tk_font.BOLD)
-            Label(self.window, text="Volume \ncontroller", font=self.font_func).place(x=5)
+
+            # volume controller
+            Label(self.window, text="Volume \ncontroller", font=self.font_func).place(x=69)
             self.vertical = Scale(self.window, from_=100, to=0, troughcolor='white', cursor="arrow", bd=3, width=20,
-                                  command=self.volume_controller)
-            self.vertical.place(x=1, y=35)
+                                  activebackground='white', state=DISABLED, command=self.volume_controller)
+            self.vertical.place(x=65, y=35)
 
         def volume_controller(self, *args):
-            print(self.vertical.get(), self.vertical.get()/100)
-            self.volume = self.vertical.get()/100
+            print(self.vertical.get(), self.vertical.get() / 100)
+            self.volume = self.vertical.get() / 100
 
         def button_click(self, note):
             self.window.delete(0, END)
             self.window.insert(0, "Please select a voice")
 
-
-
         class RadioButton:
             def __init__(self, window, text_info, buttons_dict, feature_font, intro):
                 super().__init__()
                 self.font_radio_but = feature_font
-                Label(window, text=text_info, font=self.font_radio_but).place(x=110)
+                Label(window, text=text_info, font=self.font_radio_but).place(x=164)
                 self.var = StringVar()
                 self.var.set(intro)
                 self.window = window
                 self.v0 = IntVar()
                 self.v0.set(1)
-                self.r1 = Radiobutton(self.window, text="Standard", variable=self.v0, value=1,
+                self.r1 = Radiobutton(self.window, text="Standard", variable=self.v0, value=1, state=DISABLED,
                                       command=lambda: self.button_fn(buttons_dict))
-                self.r2 = Radiobutton(self.window, text="Colorful", variable=self.v0, value=2,
+                self.r2 = Radiobutton(self.window, text="Colorful", variable=self.v0, value=2, state=DISABLED,
                                       command=lambda: self.button_fn(buttons_dict))
-                self.r1.place(x=110, y=40)
-                self.r2.place(x=110, y=70)
+                self.r1.place(x=164, y=40)
+                self.r2.place(x=164, y=70)
 
             def button_fn(self, buttons_dict):
                 self.window.delete(0, END)
@@ -137,11 +137,12 @@ class Piano:
                 self.variable = StringVar(self.window)
                 self.variable.set("Not selected")
                 self.opt = OptionMenu(self.window, self.variable, *self.option_list)
-                self.opt.config(width=10, font=self.feature_font)
-                self.opt.place(x=250, y=35)
+                self.opt.config(width=10, font=self.feature_font, state=DISABLED)
+                self.opt.place(x=304, y=35)
                 self.labelTest = Label(text="Select a voice\n*required", font=self.feature_font, fg='red')
-                self.labelTest.place(x=270, y=13)
+                self.labelTest.place(x=324, y=13)
                 self.variable.trace("w", self.callback)
+
                 # volume controller elements
                 self.volume = volume
                 print(f"self.volume in voices: {self.volume}")
@@ -226,20 +227,58 @@ class Piano:
 
         class Switch:
 
-            def __init__(self, root):
+            def __init__(self, root, radio_obj, voice_obj, vertical, window, notes_voices, black_notes):
+                """
+                This class is written for turning on/off state of all features
+                :param root:
+                :param radio_obj:
+                :param voice_obj:
+                :param vertical:
+                :param window:
+                """
+                self.window = window
+                self.radio_obj = radio_obj
+                self.voice_obj = voice_obj
+                self.vertical = vertical
+                self.notes_voices = notes_voices
+                self.black_notes = black_notes
                 self.root = root
-                self.on_off = Button(self.root, text="ON / OFF", command=self.switch_button_state())
-                self.on_off.place(x=10, y=10)
+                self.on_off = Button(self.root, text="IS OFF", bg="#d12144", padx=15, command=self.switch_button_state)
+                self.on_off.place(x=10, y=17)
 
             def switch_button_state(self):
-                # if (self.on_off['state'] == NORMAL):
-                #     # button1['state'] = tk.DISABLED
-                #     print("IS NORMAL")
-                #     pass
-                # else:
-                #     # button1['state'] = tk.NORMAL
-                #     pass
-                pass
+                """
+                Disable or enable feature buttons' state when the swtich button is off or on
+                :return:
+                """
+                if self.voice_obj.opt['state'] == NORMAL:
+                    self.voice_obj.opt['state'] = DISABLED
+                    self.vertical.configure(state=DISABLED, takefocus=0, troughcolor='#f2f2f2')
+                    self.radio_obj.r1['state'] = DISABLED
+                    self.radio_obj.r2['state'] = DISABLED
+                    self.on_off.configure(bg="#d12144", text="IS OFF")
+                    for k, v in self.notes_voices.items():
+                        k.configure(bg='#f2f2f2', state=DISABLED)
+                    for k, v in self.black_notes.items():
+                        k.configure(bg='#d4d4d4', state=DISABLED)
+
+
+                    self.window.delete(0, END)
+                    self.window.insert(0, f"Turned OFF")
+                else:
+                    self.voice_obj.opt['state'] = NORMAL
+                    self.vertical.configure(state=NORMAL, takefocus=0, troughcolor='white')
+                    self.radio_obj.r1['state'] = NORMAL
+                    self.radio_obj.r2['state'] = NORMAL
+                    self.on_off.configure(bg="#248a41", text="IS ON")
+                    for k, v in self.notes_voices.items():
+                        k.configure(bg='white', state=NORMAL)
+                    for k, v in self.black_notes.items():
+                        k.configure(bg='black', state=NORMAL)
+
+                    self.window.delete(0, END)
+                    self.window.insert(0, f"Turned ON")
+                return self
 
     class Interface(Functionality):
 
@@ -252,93 +291,93 @@ class Piano:
             buttons = Button(self.root, pady=110)
             buttons.grid(row=1, column=0)
 
-            button_do_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_do_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}C_3'))
             button_do_oct1.place(x=42, y=175)
-            button_re_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_re_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_3'))
             button_re_oct1.place(x=109, y=175)
-            button_mi_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_mi_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_3'))
             button_mi_oct1.place(x=176, y=175)
-            button_fa_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_fa_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}F_3'))
             button_fa_oct1.place(x=243, y=175)
-            button_sol_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_sol_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                      command=lambda: self.button_click(f'{self.style_name}G_3'))
             button_sol_oct1.place(x=310, y=175)
-            button_la_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_la_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}A_3'))
             button_la_oct1.place(x=377, y=175)
-            button_si_oct1 = Button(self.root, padx=29, pady=110, bg="white",
+            button_si_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}B_3'))
             button_si_oct1.place(x=444, y=175)
-            button_do_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_do_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}C_4'))
             button_do_oct2.place(x=511, y=175)
-            button_re_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_re_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_4'))
             button_re_oct2.place(x=578, y=175)
-            button_mi_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_mi_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_4'))
             button_mi_oct2.place(x=645, y=175)
-            button_fa_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_fa_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}F_4'))
             button_fa_oct2.place(x=712, y=175)
-            button_sol_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_sol_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                      command=lambda: self.button_click(f'{self.style_name}G_4'))
             button_sol_oct2.place(x=779, y=175)
-            button_la_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_la_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}A_4'))
             button_la_oct2.place(x=846, y=175)
-            button_si_oct2 = Button(self.root, padx=29, pady=110, bg="white",
+            button_si_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}B_4'))
             button_si_oct2.place(x=913, y=175)
-            button_do_oct3 = Button(self.root, padx=29, pady=110, bg="white",
+            button_do_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}C_5'))
             button_do_oct3.place(x=980, y=175)
-            button_re_oct3 = Button(self.root, padx=29, pady=110, bg="white",
+            button_re_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_5'))
             button_re_oct3.place(x=1047, y=175)
-            button_mi_oct3 = Button(self.root, padx=29, pady=110, bg="white",
+            button_mi_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_5'))
             button_mi_oct3.place(x=1114, y=175)
 
             # black notes
-            button_do_dies_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+            button_do_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}C#_3'))
             button_do_dies_oct1.place(x=85, y=175)
-            button_re_dies_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+            button_re_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_3'))
             button_re_dies_oct1.place(x=152, y=175)
-            button_fa_dies_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+            button_fa_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}F#_3'))
             button_fa_dies_oct1.place(x=286, y=175)
-            button_sol_dies_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+            button_sol_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                           command=lambda: self.button_click(f'{self.style_name}G#_3'))
             button_sol_dies_oct1.place(x=353, y=175)
-            button_la_dies_oct1 = Button(self.root, padx=14, pady=60, bg="black",
+            button_la_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}A#_3'))
             button_la_dies_oct1.place(x=420, y=175)
-            button_do_dies_oct2 = Button(self.root, padx=14, pady=60, bg="black",
+            button_do_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}C#_4'))
             button_do_dies_oct2.place(x=554, y=175)
-            button_re_dies_oct2 = Button(self.root, padx=14, pady=60, bg="black",
+            button_re_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_4'))
             button_re_dies_oct2.place(x=621, y=175)
-            button_fa_dies_oct2 = Button(self.root, padx=14, pady=60, bg="black",
+            button_fa_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}F#_4'))
             button_fa_dies_oct2.place(x=755, y=175)
-            button_sol_dies_oct2 = Button(self.root, padx=14, pady=60, bg="black",
+            button_sol_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                           command=lambda: self.button_click(f'{self.style_name}G#_4'))
             button_sol_dies_oct2.place(x=822, y=175)
-            button_la_dies_oct2 = Button(self.root, padx=14, pady=60, bg="black",
+            button_la_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}A#_4'))
             button_la_dies_oct2.place(x=889, y=175)
-            button_do_dies_oct3 = Button(self.root, padx=14, pady=60, bg="black",
+            button_do_dies_oct3 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}C#_54'))
             button_do_dies_oct3.place(x=1023, y=175)
-            button_re_dies_oct3 = Button(self.root, padx=14, pady=60, bg="black",
+            button_re_dies_oct3 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_5'))
             button_re_dies_oct3.place(x=1090, y=175)
 
@@ -349,6 +388,12 @@ class Piano:
                 button_mi_oct2: "#fff705", button_fa_oct2: "#7aff05", button_sol_oct2: "#056dff",
                 button_la_oct2: "#5c05ff", button_si_oct2: "#8205ff", button_do_oct3: "#c92216",
                 button_re_oct3: "#ff991c", button_mi_oct3: "#fff705"
+            }
+            black_notes = {
+                button_do_dies_oct1: 'C#_3', button_re_dies_oct1: 'D#_3', button_fa_dies_oct1: 'F#_3',
+                button_sol_dies_oct1: 'G#_3', button_la_dies_oct1: 'A#_3', button_do_dies_oct2: 'C#_4',
+                button_re_dies_oct2: 'D#_4', button_fa_dies_oct2: 'F#_4', button_sol_dies_oct2: 'G#_4',
+                button_la_dies_oct2: 'A#_4', button_do_dies_oct3: 'C#_54', button_re_dies_oct3: 'D#_5'
             }
             notes_voices = {
                 button_do_oct1: 'C_3', button_re_oct1: 'D_3', button_mi_oct1: 'E_3', button_fa_oct1: 'F_3',
@@ -363,10 +408,10 @@ class Piano:
             }
             text_info = "Select a piano \ncolor-style"
 
-            self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
-            self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
-                        self.style_name, self.root)
-            self.Switch(self.root)
+            radio_obj = self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
+            voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
+                                    self.style_name, self.root)
+            self.Switch(self.root, radio_obj, voice_obj, self.vertical, self.window, buttons_dict, black_notes)
 
     class Manage(Interface):
         def __init__(self):
