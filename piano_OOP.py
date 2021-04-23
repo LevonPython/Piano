@@ -124,6 +124,7 @@ class Piano:
                 self.root.bind('J', lambda event, parameter=f'{self.style_name}B_4': self.press(parameter))
                 self.root.bind('<Up>', lambda event, parameter=f'vol_up': self.press(parameter))
                 self.root.bind('<Down>', lambda event, parameter=f'vol_down': self.press(parameter))
+                self.root.bind("<MouseWheel>", self.mouse_wheel_handler)
 
                 # voice selecting elements
                 self.voices = notes_voices_dict
@@ -158,10 +159,12 @@ class Piano:
 
             def volume_controller2(self, *args):
                 print("------")
-                print(f"Volume: {args}")
+                print(f"Volume2: {args[0]}")
                 self.volume = args[0]
+                volume = round(self.volume * 100)
+                self.vertical_vol.set(volume)
                 self.window.delete(0, END)
-                self.window.insert(0, f"Volume: {self.volume}")
+                self.window.insert(0, f"Volume: {volume}")
 
             def callback(self, *args):
                 print(self.variable.get())
@@ -185,18 +188,8 @@ class Piano:
 
             def button_click(self, note):
                 super().__init__()
-                print("UP?")
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
-                if note == 'vol_up':
-                    self.volume += 0.1
-                    print(f"self.volume: {self.volume}")
-                    return self.volume_controller2(self.volume)
-                elif note == 'vol_down':
-                    self.volume -= 0.1
-                    print(f"self.volume: {self.volume}")
-                    return self.volume_controller2(self.volume)
-
                 pygame.init()
                 rel_path = f"sounds/{note}.mp3"
                 full_path = os.path.join(self.dir, rel_path)
@@ -207,6 +200,23 @@ class Piano:
                 print(f"Voice.volume is: {self.volume}")
                 return
 
+            def button_volume(self, note):
+                super().__init__()
+                self.window.delete(0, END)
+                self.window.insert(0, note.split('_')[1])
+                if note == 'vol_up':
+                    self.volume += 0.1
+                elif note == 'vol_down':
+                    self.volume -= 0.1
+
+                # check volume range
+                if self.volume > 1.0:
+                    self.volume = 1.0
+                elif self.volume < 0.0:
+                    self.volume = 0
+                print(f"self.volume: {self.volume}")
+                return self.volume_controller2(self.volume)
+
             # KEYBOARD PRESS LOGIC
             def press(self, digit=None):
                 if self.variable.get() == "Not selected":
@@ -215,10 +225,32 @@ class Piano:
                     return
                 note_name = '_'.join(digit.split('_')[1:])
                 print(f"note_name is {note_name}")
+
+                # if note is refers to volume
+                if note_name in ('up', 'down'):
+                    return self.button_volume(digit)
+                # else
+
                 for k, v in self.voices.items():
+                    # hovers on the note if press
                     if v == note_name:
                         self.change_on_hover(k, "#e6e9eb", k.cget('bg'))
                 return self.button_click(digit)
+
+            def mouse_wheel_handler(self, event):
+                self.volume += self.delta(event)
+                # check volume range
+                if self.volume > 1.0:
+                    self.volume = 1.0
+                elif self.volume < 0.0:
+                    self.volume = 0
+                print(f"self.volume: {self.volume}")
+                return self.volume_controller2(self.volume)
+
+            def delta(self, event):
+                if event.delta < 0:
+                    return -0.1
+                return 0.1
 
             def change_on_hover(self, button, on_hover, on_leave):
                 # background on entering widget
