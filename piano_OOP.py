@@ -6,7 +6,7 @@ import os
 
 # impelement recording 0%
 # implement volume from mouse 0%
-# implement turn off/on 80%
+# implement turn off/on 100%
 # implement new voice stytles 15%
 # implement click when pressing 100%
 
@@ -30,7 +30,7 @@ class Piano:
             # WINDOWS
 
             self.window = Entry(self.root, width=10, borderwidth=0, bg="#f2f2f2", justify='right', font=self.fontStyle)
-            self.window.grid(row=0, column=0, columnspan=4, padx=20, pady=12, ipadx=450, ipady=50)
+            self.window.grid(row=0, column=0, columnspan=4, padx=20, pady=15, ipadx=450, ipady=50)
 
             # set default digit zero in the window
             self.window.insert(0, "Welcome, please turn ON")
@@ -227,7 +227,7 @@ class Piano:
 
         class Switch:
 
-            def __init__(self, root, radio_obj, voice_obj, vertical, window, notes_voices, black_notes):
+            def __init__(self, root, radio_obj, voice_obj, vertical, window, notes_voices, black_notes, switch_font):
                 """
                 This class is written for turning on/off state of all features
                 :param root:
@@ -243,8 +243,14 @@ class Piano:
                 self.notes_voices = notes_voices
                 self.black_notes = black_notes
                 self.root = root
-                self.on_off = Button(self.root, text="IS OFF", bg="#d12144", padx=15, command=self.switch_button_state)
-                self.on_off.place(x=10, y=17)
+                self.switch_font = switch_font
+                # Define Our Images
+                self.on = PhotoImage(file="on.png")
+                self.off = PhotoImage(file="off.png")
+                self.switch_label = Label(self.root, text="Switch\ncontroller", font=self.switch_font).place(x=8, y=12)
+                # self.on_off = Button(self.root, text="IS OFF", bg="#d12144", padx=15, command=self.switch_button_state)
+                self.on_off = Button(self.root, image=self.off, command=self.switch_button_state)
+                self.on_off.place(x=8, y=50)
 
             def switch_button_state(self):
                 """
@@ -256,21 +262,23 @@ class Piano:
                     self.vertical.configure(state=DISABLED, takefocus=0, troughcolor='#f2f2f2')
                     self.radio_obj.r1['state'] = DISABLED
                     self.radio_obj.r2['state'] = DISABLED
-                    self.on_off.configure(bg="#d12144", text="IS OFF")
+                    # self.on_off.configure(bg="#d12144", text="IS OFF")
+                    self.on_off.configure(image=self.off)
                     for k, v in self.notes_voices.items():
                         k.configure(bg='#f2f2f2', state=DISABLED)
                     for k, v in self.black_notes.items():
                         k.configure(bg='#d4d4d4', state=DISABLED)
 
-
                     self.window.delete(0, END)
                     self.window.insert(0, f"Turned OFF")
                 else:
+
                     self.voice_obj.opt['state'] = NORMAL
                     self.vertical.configure(state=NORMAL, takefocus=0, troughcolor='white')
                     self.radio_obj.r1['state'] = NORMAL
                     self.radio_obj.r2['state'] = NORMAL
-                    self.on_off.configure(bg="#248a41", text="IS ON")
+                    # self.on_off.configure(bg="#248a41", text="IS ON")
+                    self.on_off.configure(image=self.on)
                     for k, v in self.notes_voices.items():
                         k.configure(bg='white', state=NORMAL)
                     for k, v in self.black_notes.items():
@@ -411,7 +419,8 @@ class Piano:
             radio_obj = self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
             voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
                                     self.style_name, self.root)
-            self.Switch(self.root, radio_obj, voice_obj, self.vertical, self.window, buttons_dict, black_notes)
+            self.Switch(self.root, radio_obj, voice_obj, self.vertical, self.window, buttons_dict, black_notes,
+                        self.feature_font)
 
     class Manage(Interface):
         def __init__(self):
