@@ -1,6 +1,6 @@
-.. image:: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F256071928782429626%2F&psig=AOvVaw3i8nvR4lpHfHsW4MwwFktT&ust=1616678287583000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiYuY2Cye8CFQAAAAAdAAAAABAD
+.. image:: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
    :align: left
-   :target: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F256071928782429626%2F&psig=AOvVaw3i8nvR4lpHfHsW4MwwFktT&ust=1616678287583000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiYuY2Cye8CFQAAAAAdAAAAABAD
+   :target: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
    :alt: Piano Logo
 
 ============
