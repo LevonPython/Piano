@@ -60,7 +60,7 @@ You need to install
 ============
 How it works
 ============
-Just run the  `piano_OOP.py <https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`file via any python interpreter.
+Just run the   `piano_OOP.py <https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`_ file via any python interpreter.
 The script in the file is written in Object Oriented Programming form.
 
 
