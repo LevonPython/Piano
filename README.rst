@@ -48,9 +48,7 @@ Installation
 You just need to run  `requirements.txt <https://github.com/LevonPython/piano/blob/main/requirements.txt>`_ file or install the following libraries manually: 
 
 * Any of python >3.0 versions
-* Tk interface library::
-
-   pip install tkinter
+* Tk interface library already included in python3::
 * Pygame library::
 
    pip install pygame
