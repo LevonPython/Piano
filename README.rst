@@ -34,7 +34,7 @@ Features
 ============
 The application includes severeal features:
 
-* Switch controller (turning on/off)
+- Switch controller (turning on/off)
 - Volume cotroller (via pressing keyword, mouse wheel, mouse click)
 - Recording music to wav extension
 - Notes pressing (via mouse click, pressing keywords)
