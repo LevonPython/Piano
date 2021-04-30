@@ -38,8 +38,8 @@ The application includes severeal features:
 - Volume cotroller (via pressing keyword, mouse wheel, mouse click)
 - Recording music to wav extension
 - Notes pressing (via mouse click, pressing keywords)
-- Notes color selection
-- Voice selection
+- Notes color selection (Standard/Colorful)
+- Voice selection (Piano/Synthesizer )
 - Interactive display (steps hints, notes pressing, volume values)
 
 ============
