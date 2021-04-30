@@ -304,7 +304,6 @@ class Piano:
                     self.window.delete(0, END)
                     self.window.insert(0, f"Turned OFF")
                 else:
-
                     self.voice_obj.opt['state'] = NORMAL
                     self.vertical.configure(state=NORMAL, takefocus=0, troughcolor='white')
                     self.radio_obj.r1['state'] = NORMAL
