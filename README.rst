@@ -33,6 +33,7 @@ The aim of creating this application is to give users opportunity to use functio
 Features
 ============
 The application includes severeal features:
+
 * Switch controller (turning on/off)
 - Volume cotroller (via pressing keyword, mouse wheel, mouse click)
 - Recording music to wav extension
