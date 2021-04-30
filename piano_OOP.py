@@ -5,7 +5,7 @@ import os
 
 
 # impelement recording 0%
-# implement volume from mouse 0%
+# implement volume from mouse 100%
 # implement turn off/on 100%
 # implement new voice stytles 15%
 # implement click when pressing 100%
@@ -257,6 +257,23 @@ class Piano:
                 button.config(background=on_hover)
                 self.root.after(100, lambda: button.config(background=on_leave))
 
+        class Recorder:
+
+            def __init__(self, root, window, switch_font):
+                self.window = window
+                self.root = root
+                self.switch_font = switch_font
+
+                # Define Our Images
+                self.start_rec = PhotoImage(file="on.png")
+                self.stop_rec = PhotoImage(file="off.png")
+                self.record_label = Label(self.root, text="Recorder", font=self.switch_font).place(x=8, y=100)
+                self.on_off = Button(self.root, image=self.start_rec, command=self.recorder)
+                self.on_off.place(x=8, y=120)
+
+            def recorder(self):
+                pass
+
         class Switch:
 
             def __init__(self, root, radio_obj, voice_obj, vertical, window, notes_voices, black_notes, switch_font):
@@ -450,6 +467,7 @@ class Piano:
             radio_obj = self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
             voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
                                     self.style_name, self.root)
+            self.Recorder(self.root, self.window, self.feature_font)
             self.Switch(self.root, radio_obj, voice_obj, self.vertical, self.window, buttons_dict, black_notes,
                         self.feature_font)
 
