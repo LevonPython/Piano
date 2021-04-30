@@ -45,7 +45,7 @@ The application includes severeal features:
 ============
 Installation
 ============
-You just need to run `requirements.txt <https://github.com/LevonPython/piano/blob/main/requirements.txt>` file or install the following libriaries manually: 
+You just need to run  `requirements.txt <https://github.com/LevonPython/piano/blob/main/requirements.txt>`_ file or install the following libriaries manually: 
 
 * Any of python >3.0 versions
 * Tk interface library::
