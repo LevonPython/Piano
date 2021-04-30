@@ -9,6 +9,7 @@ Piano v1.0
 
 - `Introduction`_
 - `Problems the application is solving`_
+- `Features`_
 - `Installation`_
 - `How it works`_
 - `Bug reporting`_
@@ -27,6 +28,18 @@ The application is written in python (used libraries: Tkinter, pygame).
 Problems the application is solving
 ============
 The aim of creating this application is to give users opportunity to use functional piano in their own computer.
+
+============
+Features
+============
+The application includes severeal features:
+- Switch controller (turning on/off)
+- Volume cotroller (via pressing keyword, mouse wheel, mouse click)
+- Recording music to wav extension
+- Notes pressing (via mouse click, pressing keywords)
+- Notes color selection
+- Voice selection
+- Interactive display (steps hints, notes pressing, volume values)
 
 ============
 Installation
