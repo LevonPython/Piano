@@ -317,19 +317,18 @@ class Piano:
                 self.rec_tab.configure(image=self.stop, state=NORMAL)
                 self.recording_status = True
                 print("Record?")
-                # while self.recording_status:
-                #     print('Recording')
-                #     # Store data in chunks for specified time (seconds)
-                #     for i in range(0, int(self.fs / self.chunk * self.seconds)):
-                #         data = self.stream.read(self.chunk)
-                #         self.frames.append(data)
-                #     self.seconds_count += 1
-                #     print(self.seconds_count)
-                #     if self.seconds_count == 10:
-                #         break
+                self.root.after(1, self.start_recording())
 
             def start_recording(self):
-                print("GOT IT")
+                print("GOT IT", self.rec_on_off['image'])
+                while self.rec_on_off['image'] == "pyimage1":
+                    print('Recording started')
+                    # Store data in chunks for specified time (seconds)
+                    for i in range(0, int(self.fs / self.chunk * self.seconds)):
+                        data = self.stream.read(self.chunk)
+                        self.frames.append(data)
+                    self.seconds_count += 1
+                    print(self.seconds_count)
 
             def recorder_stop(self):
                 self.rec_on_off.configure(image=self.stop_rec)
@@ -353,15 +352,6 @@ class Piano:
                 wf.writeframes(b''.join(self.frames))
                 wf.close()
                 print(f"{self.seconds_count} seconds recorded")
-
-        class Recorder:
-
-            def __init__(self, status):
-                self.status = status
-
-            def start_recording(self):
-                if self.status == 'pyimage3':
-                    print("GOT IT")
 
         class Switch:
 
@@ -569,8 +559,6 @@ class Piano:
             voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
                                     self.style_name, self.root, rec_obj)
 
-            self.Recorder(rec_obj.rec_on_off['image']).start_recording()
-            print(f"---{rec_obj.rec_on_off['image']}")
             self.Switch(self.root, radio_obj, voice_obj, rec_obj.rec_on_off, rec_obj.rec_tab, self.vertical,
                         self.window, buttons_dict, black_notes, self.feature_font)
 
