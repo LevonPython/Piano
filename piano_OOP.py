@@ -10,6 +10,7 @@ import wave
 # pip install pipwin
 # pipwin install pyaudio
 from datetime import datetime
+import threading
 
 # impelement recording 20%
 # show window countdown 3,2,1 and voice 0%
@@ -270,6 +271,14 @@ class Piano:
                 self.root.after(100, lambda: button.config(background=on_leave))
 
         class RecorderBlock:
+            """
+
+            If you create an application on windows platform, you can use default stereo mixer virtual device to
+            record your PC's output.
+
+            - enable stereo mixer
+            https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/
+            """
 
             def __init__(self, root, window, switch_font):
                 self.window = window
@@ -285,7 +294,7 @@ class Piano:
                 # self.start_rec = PhotoImage(file=r"static\pics\rec_start.png")
                 # self.stop_rec = PhotoImage(file=r"static\pics\off.png")
                 self.record_label = Label(self.root, text="Recorder", font=self.switch_font).place(x=8, y=85)
-                self.rec_on_off = Button(self.root, image=self.stop_rec, command=self.recorder, state=DISABLED)
+                self.rec_on_off = Button(self.root, image=self.stop_rec, command=lambda: [self.start_recording(), self.recorder()], state=DISABLED)
                 self.rec_on_off.place(x=8, y=105)
 
                 self.rec_tab = Button(self.root, image=self.stop, command=self.recorder_stop, state=DISABLED)
@@ -313,11 +322,13 @@ class Piano:
                 self.seconds_count = 0
 
             def recorder(self):
-                self.rec_on_off.configure(image=self.start_rec)
-                self.rec_tab.configure(image=self.stop, state=NORMAL)
+                self.rec_on_off.configure(image=self.start_rec, relief=SUNKEN)
+                self.rec_tab.configure(image=self.stop, state=NORMAL, relief=SUNKEN)
                 self.recording_status = True
                 print("Record?")
-                self.root.after(1, self.start_recording())
+                # self.root.after(1, self.start_recording())
+                t = threading.Thread(target=self.start_recording)
+                t.start()
 
             def start_recording(self):
                 print("GOT IT", self.rec_on_off['image'])
@@ -327,6 +338,8 @@ class Piano:
                     for i in range(0, int(self.fs / self.chunk * self.seconds)):
                         data = self.stream.read(self.chunk)
                         self.frames.append(data)
+                    # if self.seconds_count > 5:
+                    #     break
                     self.seconds_count += 1
                     print(self.seconds_count)
 
@@ -338,7 +351,7 @@ class Piano:
 
                 # Stop and close the stream
                 self.stream.stop_stream()
-                # self.stream.close()
+                self.stream.close()
                 # Terminate the PortAudio interface
                 self.p.terminate()
 

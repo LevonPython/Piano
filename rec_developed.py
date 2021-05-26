@@ -9,8 +9,8 @@ pyaudio gives you more low-level control, it is possible to get and set paramete
 and to check your CPU load and input or output latency.
 """
 
-rec_status = int(input("Do you want to record? Insert 1 or 0: "))
-print(f"rec_status: {rec_status}")
+# rec_status = int(input("Do you want to record? Insert 1 or 0: "))
+# print(f"rec_status: {rec_status}")
 
 chunk = 1024  # Record in chunks of 1024 samples
 sample_format = pyaudio.paInt16  # 16 bits per sample
@@ -30,17 +30,17 @@ stream = p.open(format=sample_format,
                 input=True)
 frames = []  # Initialize array to store frames
 seconds_count = 0
-while rec_status == 1:
+# while rec_status == 1:
 
-    print('Recording')
-    # data = stream.read(chunk)
-    # frames.append(data)
-    rec_status = int(input("Continue recording? Insert 1 or 0: "))
-    # Store data in chunks for specified time (seconds)
-    for i in range(0, int(fs / chunk * seconds)):
-        data = stream.read(chunk)
-        frames.append(data)
-    seconds_count += 1
+print('Recording')
+# data = stream.read(chunk)
+# frames.append(data)
+# rec_status = int(input("Continue recording? Insert 1 or 0: "))
+# Store data in chunks for specified time (seconds)
+for i in range(0, int(fs / chunk * seconds)):
+    data = stream.read(chunk)
+    frames.append(data)
+seconds_count += 1
 
 print(f"frames {frames}")
 

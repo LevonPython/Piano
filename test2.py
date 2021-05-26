@@ -1,28 +1,28 @@
-import sounddevice as sd
-import soundfile as sf
-from tkinter import *
+import tkinter as tk
+import threading
 
+class App():
+    def __init__(self, master):
+        self.isrecording = False
+        self.button = tk.Button(main, text='rec')
+        self.button.bind("<Button-1>", self.startrecording)
+        self.button.bind("<ButtonRelease-1>", self.stoprecording)
+        self.button.pack()
+        self.count = 0
 
-def Voice_rec():
-    fs = 48000
+    def startrecording(self, event):
+        self.isrecording = True
+        t = threading.Thread(target=self._record)
+        t.start()
 
-    # seconds
-    duration = 5
-    myrecording = sd.rec(int(duration * fs),
-                         samplerate=fs, channels=2)
-    sd.wait()
+    def stoprecording(self, event):
+        self.isrecording = False
 
-    # Save as FLAC file at correct sampling rate
-    return sf.write('my_Audio_file.flac', myrecording, fs)
+    def _record(self):
+        while self.isrecording:
+            print(f"Recording: {self.count}")
+            self.count += 1
 
-
-master = Tk()
-
-Label(master, text=" Voice Recoder : "
-      ).grid(row=0, sticky=W, rowspan=5)
-
-b = Button(master, text="Start", command=Voice_rec)
-b.grid(row=0, column=2, columnspan=2, rowspan=2,
-       padx=5, pady=5)
-
-mainloop()
+main = tk.Tk()
+app = App(main)
+main.mainloop()
