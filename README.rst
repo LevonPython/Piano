@@ -1,6 +1,6 @@
-.. image:: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F256071928782429626%2F&psig=AOvVaw3i8nvR4lpHfHsW4MwwFktT&ust=1616678287583000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiYuY2Cye8CFQAAAAAdAAAAABAD
+.. image:: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
    :align: left
-   :target: https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.pinterest.com%2Fpin%2F256071928782429626%2F&psig=AOvVaw3i8nvR4lpHfHsW4MwwFktT&ust=1616678287583000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPiYuY2Cye8CFQAAAAAdAAAAABAD
+   :target: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
    :alt: Piano Logo
 
 ============
@@ -9,6 +9,7 @@ Piano v1.0
 
 - `Introduction`_
 - `Problems the application is solving`_
+- `Features`_
 - `Installation`_
 - `How it works`_
 - `Bug reporting`_
@@ -29,14 +30,25 @@ Problems the application is solving
 The aim of creating this application is to give users opportunity to use functional piano in their own computer.
 
 ============
+Features
+============
+The application includes severeal features:
+
+- Switch controller (turning on/off)
+- Volume cotroller (via pressing keyword, mouse wheel, mouse click)
+- Recording music to wav extension
+- Notes pressing (via mouse click, pressing keywords)
+- Notes color selection (Standard/Colorful)
+- Voice selection (Piano/Synthesizer )
+- Interactive display (steps hints, notes pressing, volume values)
+
+============
 Installation
 ============
-You need to install 
+You just need to run  `requirements.txt <https://github.com/LevonPython/piano/blob/main/requirements.txt>`_ file or install the following libraries manually: 
 
 * Any of python >3.0 versions
-* Tk interface library::
-
-   pip install tkinter
+* Tk interface library already included in python3::
 * Pygame library::
 
    pip install pygame
@@ -46,7 +58,7 @@ You need to install
 ============
 How it works
 ============
-Just run the  `piano_OOP.py <https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`file via any python interpreter.
+Just run the   `piano_OOP.py <https://github.com/LevonPython/calculator/blob/main/calculator_OOP.py>`_ file via any python interpreter.
 The script in the file is written in Object Oriented Programming form.
 
 

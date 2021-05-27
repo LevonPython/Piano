@@ -1,15 +1,29 @@
+import time
 from tkinter import *
 import tkinter.font as tk_font
 import pygame
 import os
+from PIL import ImageTk, Image
+# pip install pillow
+import pyaudio
+import wave
+# pip install pipwin
+# pipwin install pyaudio
+from datetime import datetime
+import threading
 
-
-# impelement recording 0%
+# impelement recording 20%
+# show window countdown 3,2,1 and voice 0%
 # implement volume from mouse 100%
 # implement turn off/on 100%
 # implement new voice stytles 15%
 # implement click when pressing 100%
+<<<<<<< HEAD
 # implement Octave 0%
+=======
+# implement background enable changing 0%
+# implement input as array to playing a music 0%
+>>>>>>> 31d87f94367517b7bf9bac6ab0679c975c5daf55
 
 
 class Piano:
@@ -99,7 +113,7 @@ class Piano:
         class Voices:
 
             def __init__(self, notes_voices_dict, window, direction, volume, vertical_vol, feature_font,
-                         style_name, root):
+                         style_name, root, rec_obj):
                 # super().__init__()
                 self.style_name = style_name
                 self.root = root
@@ -155,6 +169,8 @@ class Piano:
                 self.vertical_vol = vertical_vol
                 self.vertical_vol.configure(command=self.volume_controller)
 
+                self.rec_obj = rec_obj
+
             def volume_controller(self, *args):
                 print("------")
                 print(f"Volume: {self.vertical_vol.get()} {self.vertical_vol.get() / 100}")
@@ -196,7 +212,7 @@ class Piano:
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
                 pygame.init()
-                rel_path = f"sounds/{note}.mp3"
+                rel_path = f"static/sounds/{note}.mp3"
                 full_path = os.path.join(self.dir, rel_path)
                 print(full_path)
                 sound = pygame.mixer.Sound(f"{full_path}")
@@ -262,7 +278,15 @@ class Piano:
                 button.config(background=on_hover)
                 self.root.after(100, lambda: button.config(background=on_leave))
 
-        class Recorder:
+        class RecorderBlock:
+            """
+
+            If you create an application on windows platform, you can use default stereo mixer virtual device to
+            record your PC's output.
+
+            - enable stereo mixer
+            https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/
+            """
 
             def __init__(self, root, window, switch_font):
                 self.window = window
@@ -270,18 +294,90 @@ class Piano:
                 self.switch_font = switch_font
 
                 # Define Our Images
-                self.start_rec = PhotoImage(file="on.png")
-                self.stop_rec = PhotoImage(file="off.png")
-                self.record_label = Label(self.root, text="Recorder", font=self.switch_font).place(x=8, y=100)
-                self.on_off = Button(self.root, image=self.start_rec, command=self.recorder)
-                self.on_off.place(x=8, y=120)
+
+                self.start_rec = ImageTk.PhotoImage(Image.open(r"static\pics\rec_start.png"))
+                self.stop_rec = ImageTk.PhotoImage(Image.open(r"static\pics\rec_stop.png"))
+                self.stop = ImageTk.PhotoImage(Image.open(r"static\pics\stop2.png"))
+                self.start = ImageTk.PhotoImage(Image.open(r"static\pics\play2.png"))
+                # self.start_rec = PhotoImage(file=r"static\pics\rec_start.png")
+                # self.stop_rec = PhotoImage(file=r"static\pics\off.png")
+                self.record_label = Label(self.root, text="Recorder", font=self.switch_font).place(x=8, y=85)
+                self.rec_on_off = Button(self.root, image=self.stop_rec, command=lambda: [self.start_recording(), self.recorder()], state=DISABLED)
+                self.rec_on_off.place(x=8, y=105)
+
+                self.rec_tab = Button(self.root, image=self.stop, command=self.recorder_stop, state=DISABLED)
+                self.rec_tab.place(x=8, y=140)
+
+                self.recording_status = False
+                """
+                pyaudio gives you more low-level control, it is possible to get and set parameters
+                for your input and output devices, and to check your CPU load and input or output latency.
+                """
+                self.chunk = 1024  # Record in chunks of 1024 samples
+                self.sample_format = pyaudio.paInt16  # 16 bits per sample
+                self.channels = 2
+                self.fs = 44100  # Record at 44100 samples per second
+                self.seconds = 1
+                self.file_date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+                self.filename = f"records/record_{self.file_date}.wav"
+                print(self.filename)
+
+                self.p = pyaudio.PyAudio()  # Create an interface to PortAudio
+
+                self.stream = self.p.open(format=self.sample_format, channels=self.channels, rate=self.fs,
+                                          frames_per_buffer=self.chunk, input=True)
+                self.frames = []  # Initialize array to store frames
+                self.seconds_count = 0
 
             def recorder(self):
-                pass
+                self.rec_on_off.configure(image=self.start_rec, relief=SUNKEN)
+                self.rec_tab.configure(image=self.stop, state=NORMAL, relief=SUNKEN)
+                self.recording_status = True
+                print("Record?")
+                # self.root.after(1, self.start_recording())
+                t = threading.Thread(target=self.start_recording)
+                t.start()
+
+            def start_recording(self):
+                print("GOT IT", self.rec_on_off['image'])
+                while self.rec_on_off['image'] == "pyimage1":
+                    print('Recording started')
+                    # Store data in chunks for specified time (seconds)
+                    for i in range(0, int(self.fs / self.chunk * self.seconds)):
+                        data = self.stream.read(self.chunk)
+                        self.frames.append(data)
+                    # if self.seconds_count > 5:
+                    #     break
+                    self.seconds_count += 1
+                    print(self.seconds_count)
+
+            def recorder_stop(self):
+                self.rec_on_off.configure(image=self.stop_rec)
+                self.rec_tab.configure(image=self.start, state=DISABLED)
+                self.recording_status = False
+                print("Stop Recording?")
+
+                # Stop and close the stream
+                self.stream.stop_stream()
+                self.stream.close()
+                # Terminate the PortAudio interface
+                self.p.terminate()
+
+                print('Finished recording')
+
+                # Save the recorded data as a WAV file
+                wf = wave.open(self.filename, 'wb')
+                wf.setnchannels(self.channels)
+                wf.setsampwidth(self.p.get_sample_size(self.sample_format))
+                wf.setframerate(self.fs)
+                wf.writeframes(b''.join(self.frames))
+                wf.close()
+                print(f"{self.seconds_count} seconds recorded")
 
         class Switch:
 
-            def __init__(self, root, radio_obj, voice_obj, vertical, window, notes_voices, black_notes, switch_font):
+            def __init__(self, root, radio_obj, voice_obj, rec_obj, rec_obj2, vertical, window, notes_voices,
+                         black_notes, switch_font):
                 """
                 This class is written for turning on/off state of all features
                 :param root:
@@ -293,18 +389,24 @@ class Piano:
                 self.window = window
                 self.radio_obj = radio_obj
                 self.voice_obj = voice_obj
+                self.rec_obj = rec_obj
+                self.rec_obj2 = rec_obj2
                 self.vertical = vertical
                 self.notes_voices = notes_voices
                 self.black_notes = black_notes
                 self.root = root
                 self.switch_font = switch_font
                 # Define Our Images
-                self.on = PhotoImage(file="on.png")
-                self.off = PhotoImage(file="off.png")
+                self.on = PhotoImage(file=r"static\pics\on.png")
+                self.off = PhotoImage(file=r"static\pics\off.png")
                 self.switch_label = Label(self.root, text="Switch\ncontroller", font=self.switch_font).place(x=8, y=12)
-                # self.on_off = Button(self.root, text="IS OFF", bg="#d12144", padx=15, command=self.switch_button_state)
                 self.on_off = Button(self.root, image=self.off, command=self.switch_button_state)
                 self.on_off.place(x=8, y=50)
+
+                self.start_rec = ImageTk.PhotoImage(Image.open(r"static\pics\rec_start.png"))
+                self.stop_rec = ImageTk.PhotoImage(Image.open(r"static\pics\rec_stop.png"))
+                self.stop = ImageTk.PhotoImage(Image.open(r"static\pics\stop2.png"))
+                self.start = ImageTk.PhotoImage(Image.open(r"static\pics\play2.png"))
 
             def switch_button_state(self):
                 """
@@ -318,6 +420,8 @@ class Piano:
                     self.radio_obj.r2['state'] = DISABLED
                     # self.on_off.configure(bg="#d12144", text="IS OFF")
                     self.on_off.configure(image=self.off)
+                    self.rec_obj2.configure(image=self.start, state=DISABLED)
+                    self.rec_obj.configure(image=self.stop_rec, state=DISABLED)
                     for k, v in self.notes_voices.items():
                         k.configure(bg='#f2f2f2', state=DISABLED)
                     for k, v in self.black_notes.items():
@@ -326,13 +430,15 @@ class Piano:
                     self.window.delete(0, END)
                     self.window.insert(0, f"Turned OFF")
                 else:
-
                     self.voice_obj.opt['state'] = NORMAL
                     self.vertical.configure(state=NORMAL, takefocus=0, troughcolor='white')
                     self.radio_obj.r1['state'] = NORMAL
                     self.radio_obj.r2['state'] = NORMAL
                     # self.on_off.configure(bg="#248a41", text="IS ON")
                     self.on_off.configure(image=self.on)
+                    self.rec_obj['state'] = NORMAL
+                    # self.rec_obj2['state'] = NORMAL
+                    self.rec_obj.configure(image=self.stop_rec)
                     for k, v in self.notes_voices.items():
                         k.configure(bg='white', state=NORMAL)
                     for k, v in self.black_notes.items():
@@ -469,13 +575,13 @@ class Piano:
                 button_re_dies_oct3: 'D#_5'
             }
             text_info = "Select a piano \ncolor-style"
-
+            rec_obj = self.RecorderBlock(self.root, self.window, self.feature_font)
             radio_obj = self.RadioButton(self.window, text_info, buttons_dict, self.feature_font, intro="Standard")
             voice_obj = self.Voices(notes_voices, self.window, self.dir, self.volume, self.vertical, self.feature_font,
-                                    self.style_name, self.root)
-            self.Recorder(self.root, self.window, self.feature_font)
-            self.Switch(self.root, radio_obj, voice_obj, self.vertical, self.window, buttons_dict, black_notes,
-                        self.feature_font)
+                                    self.style_name, self.root, rec_obj)
+
+            self.Switch(self.root, radio_obj, voice_obj, rec_obj.rec_on_off, rec_obj.rec_tab, self.vertical,
+                        self.window, buttons_dict, black_notes, self.feature_font)
 
     class Manage(Interface):
         def __init__(self):
