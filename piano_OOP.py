@@ -18,12 +18,8 @@ import threading
 # implement turn off/on 100%
 # implement new voice stytles 15%
 # implement click when pressing 100%
-<<<<<<< HEAD
-# implement Octave 0%
-=======
 # implement background enable changing 0%
 # implement input as array to playing a music 0%
->>>>>>> 31d87f94367517b7bf9bac6ab0679c975c5daf55
 
 
 class Piano:
@@ -32,8 +28,6 @@ class Piano:
         def __init__(self):
             self.root = Tk()
             self.root.title("Piano")
-
-
 
             # self.windowSTYLES
             self.fontStyle = tk_font.Font(size=32, family="Courier", weight="bold")
@@ -46,10 +40,8 @@ class Piano:
 
             # WINDOWS
 
-            self.window = Entry(self.root, width=10, borderwidth=0, justify='right', bg="#f2f2f2",font=self.fontStyle)
+            self.window = Entry(self.root, width=10, borderwidth=0, bg="#f2f2f2", justify='right', font=self.fontStyle)
             self.window.grid(row=0, column=0, columnspan=4, padx=20, pady=15, ipadx=450, ipady=50)
-            # self.root.wm_attributes('-transparentcolor', self.root['bg'])
-            # self.root.wm_attributes('-transparentcolor', "#f2f2f2")
 
             # set default digit zero in the window
             self.window.insert(0, "Welcome, please turn ON")
@@ -280,10 +272,8 @@ class Piano:
 
         class RecorderBlock:
             """
-
             If you create an application on windows platform, you can use default stereo mixer virtual device to
             record your PC's output.
-
             - enable stereo mixer
             https://www.howtogeek.com/howto/39532/how-to-enable-stereo-mix-in-windows-7-to-record-audio/
             """
@@ -459,93 +449,93 @@ class Piano:
             buttons = Button(self.root, pady=110)
             buttons.grid(row=1, column=0)
 
-            button_do_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
-                                    command=lambda: self.button_click(f'{self.style_name}C_3')) # bg="#f2f2f2",
+            button_do_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
+                                    command=lambda: self.button_click(f'{self.style_name}C_3'))
             button_do_oct1.place(x=42, y=175)
-            button_re_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_re_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_3'))
             button_re_oct1.place(x=109, y=175)
-            button_mi_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_mi_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_3'))
             button_mi_oct1.place(x=176, y=175)
-            button_fa_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_fa_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}F_3'))
             button_fa_oct1.place(x=243, y=175)
-            button_sol_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_sol_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                      command=lambda: self.button_click(f'{self.style_name}G_3'))
             button_sol_oct1.place(x=310, y=175)
-            button_la_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_la_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}A_3'))
             button_la_oct1.place(x=377, y=175)
-            button_si_oct1 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_si_oct1 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}B_3'))
             button_si_oct1.place(x=444, y=175)
-            button_do_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_do_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}C_4'))
             button_do_oct2.place(x=511, y=175)
-            button_re_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_re_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_4'))
             button_re_oct2.place(x=578, y=175)
-            button_mi_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_mi_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_4'))
             button_mi_oct2.place(x=645, y=175)
-            button_fa_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_fa_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}F_4'))
             button_fa_oct2.place(x=712, y=175)
-            button_sol_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_sol_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                      command=lambda: self.button_click(f'{self.style_name}G_4'))
             button_sol_oct2.place(x=779, y=175)
-            button_la_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_la_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}A_4'))
             button_la_oct2.place(x=846, y=175)
-            button_si_oct2 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_si_oct2 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}B_4'))
             button_si_oct2.place(x=913, y=175)
-            button_do_oct3 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_do_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}C_5'))
             button_do_oct3.place(x=980, y=175)
-            button_re_oct3 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_re_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}D_5'))
             button_re_oct3.place(x=1047, y=175)
-            button_mi_oct3 = Button(self.root, padx=29, pady=110, state=DISABLED,
+            button_mi_oct3 = Button(self.root, padx=29, pady=110, bg="#f2f2f2", state=DISABLED,
                                     command=lambda: self.button_click(f'{self.style_name}E_5'))
             button_mi_oct3.place(x=1114, y=175)
 
             # black notes
-            button_do_dies_oct1 = Button(self.root, padx=14, pady=60, state=DISABLED,
-                                         command=lambda: self.button_click(f'{self.style_name}C#_3')) #bg="#d4d4d4",
+            button_do_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
+                                         command=lambda: self.button_click(f'{self.style_name}C#_3'))
             button_do_dies_oct1.place(x=85, y=175)
-            button_re_dies_oct1 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_re_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_3'))
             button_re_dies_oct1.place(x=152, y=175)
-            button_fa_dies_oct1 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_fa_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}F#_3'))
             button_fa_dies_oct1.place(x=286, y=175)
-            button_sol_dies_oct1 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_sol_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                           command=lambda: self.button_click(f'{self.style_name}G#_3'))
             button_sol_dies_oct1.place(x=353, y=175)
-            button_la_dies_oct1 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_la_dies_oct1 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}A#_3'))
             button_la_dies_oct1.place(x=420, y=175)
-            button_do_dies_oct2 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_do_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}C#_4'))
             button_do_dies_oct2.place(x=554, y=175)
-            button_re_dies_oct2 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_re_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_4'))
             button_re_dies_oct2.place(x=621, y=175)
-            button_fa_dies_oct2 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_fa_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}F#_4'))
             button_fa_dies_oct2.place(x=755, y=175)
-            button_sol_dies_oct2 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_sol_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                           command=lambda: self.button_click(f'{self.style_name}G#_4'))
             button_sol_dies_oct2.place(x=822, y=175)
-            button_la_dies_oct2 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_la_dies_oct2 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}A#_4'))
             button_la_dies_oct2.place(x=889, y=175)
-            button_do_dies_oct3 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_do_dies_oct3 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}C#_54'))
             button_do_dies_oct3.place(x=1023, y=175)
-            button_re_dies_oct3 = Button(self.root, padx=14, pady=60, state=DISABLED,
+            button_re_dies_oct3 = Button(self.root, padx=14, pady=60, bg="#d4d4d4", state=DISABLED,
                                          command=lambda: self.button_click(f'{self.style_name}D#_5'))
             button_re_dies_oct3.place(x=1090, y=175)
 
