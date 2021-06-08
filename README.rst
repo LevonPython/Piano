@@ -1,6 +1,6 @@
-.. image:: https://github.com/LevonPython/piano/blob/main/static/pics/Piano%20picture.PNG
+.. image:: https://github.com/LevonPython/piano/blob/main/static/pics/Capture1.PNG
    :align: left
-   :target: https://github.com/LevonPython/piano/blob/main/static/pics/Piano%20picture.PNG
+   :target: https://github.com/LevonPython/piano/blob/main/static/pics/Capture2.PNG
    :alt: Piano Logo
 
 ============
