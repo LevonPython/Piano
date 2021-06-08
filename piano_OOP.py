@@ -12,14 +12,17 @@ import wave
 from datetime import datetime
 import threading
 
-# impelement recording 20%
+# --- TO DO ---
 # show window countdown 3,2,1 and voice 0%
-# implement volume from mouse 100%
-# implement turn off/on 100%
-# implement new voice stytles 15%
-# implement click when pressing 100%
 # implement background enable changing 0%
 # implement input as array to playing a music 0%
+# --- DOING ---
+# implement new voice stytles 15%
+# impelement recording 20%
+# --- DONE ---
+# implement volume from mouse 100%
+# implement turn off/on 100%
+# implement click when pressing 100%
 
 
 class Piano:
