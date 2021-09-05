@@ -144,6 +144,8 @@ class Piano:
                 self.feature_font = feature_font
                 self.option_list = [
                     "Piano",
+                    "GrandPiano",
+                    "ModernPiano",
                     "Synthesizer"
                 ]
                 self.variable = StringVar(self.window)
@@ -183,8 +185,12 @@ class Piano:
                 print(self.variable.get())
                 if self.variable.get() == "Piano":
                     style_name = "Piano_"
-                else:
+                elif self.variable.get() == "GrandPiano":
+                    style_name = "Piano2_"
+                elif self.variable.get() == "ModernPiano":
                     style_name = "Synthesizer_"
+                else:
+                    style_name = "Synthesizer2_"
                 self.labelTest.configure(text="The selected voice is {}".format(self.variable.get()), fg='black')
                 print(self.voices)
                 self.change_voice(style_name, self.voices)
@@ -201,6 +207,7 @@ class Piano:
 
             def button_click(self, note):
                 super().__init__()
+                # print(f"note::: {note}")
                 self.window.delete(0, END)
                 self.window.insert(0, note.split('_')[1])
                 pygame.init()
@@ -248,6 +255,7 @@ class Piano:
                     # hovers on the note if press
                     if v == note_name:
                         self.change_on_hover(k, "#e6e9eb", k.cget('bg'))
+                print(f"digit: {digit}")
                 return self.button_click(digit)
 
             def mouse_wheel_handler(self, event):
