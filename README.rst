@@ -1,6 +1,6 @@
-.. image:: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
+.. image:: https://github.com/LevonPython/piano/blob/main/static/pics/Capture1.PNG
    :align: left
-   :target: https://github.com/LevonPython/piano/blob/main/Piano%20picture.PNG
+   :target: https://github.com/LevonPython/piano/blob/main/static/pics/Capture2.PNG
    :alt: Piano Logo
 
 ============
@@ -18,7 +18,7 @@ Piano v1.0
 Introduction
 ============
 
-This application is a minimal functional version of syntesizer/piano. 
+This application is a minimal functional version of synthesizer/piano. 
 The application is written in python (used libraries: Tkinter, pygame).
 
 * The  `Tkinter <https://docs.python.org/3/library/tkinter.html>`_ package (“Tk interface”) is the standard Python interface to the Tk GUI toolkit. 
