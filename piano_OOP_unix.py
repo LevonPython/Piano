@@ -454,6 +454,8 @@ class Piano:
         def __init__(self):
             super().__init__()
 
+            pygame.mixer.init() #frequency, size, channels, buffersize
+            # pygame.init() #turn all of pygame on.
             # --------- THE INTERFACE ------------
             # BUTTONS
             # white notes
