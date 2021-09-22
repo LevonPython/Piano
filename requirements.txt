@@ -5,7 +5,7 @@ docopt==0.6.2
 idna==2.10
 Js2Py==0.71
 packaging==20.9
-Pillow==8.2.0
+pillow>=8.3.2
 pipwin==0.5.1
 pygame==2.0.1
 pyjsparser==2.7.1
