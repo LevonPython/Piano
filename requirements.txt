@@ -1,5 +1,5 @@
 beautifulsoup4==4.9.3
-certifi==2021.5.30
+certifi==2022.12.07
 chardet==4.0.0
 docopt==0.6.2
 idna==2.10
